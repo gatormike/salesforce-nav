@@ -79,12 +79,18 @@ function injectMenu(container) {
   const menuBar = document.createElement('div');
   menuBar.id = 'sf-custom-nav';
   menuBar.className = 'sf-custom-nav-bar';
+  // Ensure caret image resolves to the extension's file URL when styles are injected
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+    menuBar.style.setProperty('--sf-caret-url', `url("${chrome.runtime.getURL('down_carat.png')}")`);
+  }
   
   // Create menu items
   menuConfig.forEach(menuGroup => {
     const menuItem = createMenuItem(menuGroup);
     menuBar.appendChild(menuItem);
   });
+
+  // (extension popup button removed)
   
   console.log('[SF Nav] Created menu bar:', menuBar);
   console.log('[SF Nav] Menu has', menuConfig.length, 'groups');

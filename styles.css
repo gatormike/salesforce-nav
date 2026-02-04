@@ -23,11 +23,14 @@
 
 .sf-nav-button {
   background: transparent;
-  border: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
   color: #080707;
   font-size: 13px;
   font-weight: 400;
-  padding: 0.60rem 0.5rem 0.60rem 0.5rem; 
+  padding: 8px 8px 8px 8px; 
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -36,8 +39,25 @@
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
   transition: background-color 0.2s ease;
   white-space: nowrap;
+    border-top: 3px solid #5194f800;
+}
+
+.sf-nav-button::after {
+  content: '';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-image: var(--sf-caret-url, url('down_carat.png'));
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
 }
 
 .sf-nav-button:hover {
@@ -47,9 +67,8 @@
 
 .sf-nav-item.open .sf-nav-button {
   background-color: #edf4fe;
+  border-top: 3px solid #5193f8;
 }
-
-/* arrow removed: no pseudo-element displayed */
 
 .sf-nav-dropdown {
   position: absolute;
@@ -86,36 +105,5 @@
 .sf-nav-link:hover {
   background-color: #edf4fe;
   color: #0070d2;
-}
-
-/* Ensure it works well with Salesforce's dark theme if applicable */
-@media (prefers-color-scheme: dark) {
-  .sf-custom-nav-bar {
-    background: #16325c;
-    border-bottom-color: #0b2399;
-  }
-  
-  .sf-nav-button,
-  .sf-nav-link {
-    color: #ffffff;
-  }
-  
-  .sf-nav-button:hover,
-  .sf-nav-item.open .sf-nav-button {
-    background-color: #0b2399;
-  }
-  
-  .sf-nav-dropdown {
-    background: #16325c;
-    border-color: #0b2399;
-  }
-  
-  .sf-nav-link:hover {
-    background-color: #0b2399;
-    color: #57a3fd;
-  }
-  
-  .sf-nav-link {
-    border-bottom-color: #0b2399;
-  }
+  text-decoration: none;
 }
