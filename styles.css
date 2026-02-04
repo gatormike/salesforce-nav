@@ -1,0 +1,151 @@
+.sf-custom-nav-bar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #dddbda;
+  padding: 0 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* small gap between nav items for consistent spacing */
+.sf-custom-nav-bar {
+  gap: 0.25rem;
+}
+
+.sf-nav-item {
+  position: relative;
+  margin-right: 0.5rem;
+}
+
+.sf-nav-button {
+  background: transparent;
+  border: none;
+  color: #080707;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.sf-nav-button:focus {
+  outline: 2px solid rgba(0,112,210,0.25);
+  outline-offset: 2px;
+}
+
+.sf-nav-button:hover {
+  background-color: #edf4fe;
+}
+
+.sf-nav-button[aria-expanded="true"] {
+  background-color: #edf4fe;
+}
+
+.sf-nav-button::after {
+  content: '';
+  display: inline-block;
+  margin-left: 0.5rem;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #080707;
+  transition: transform 0.2s ease;
+}
+
+.sf-nav-button[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+.sf-nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #dddbda;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  display: none;
+  z-index: 10000;
+  margin-top: 2px;
+}
+
+/* Try to avoid dropdowns growing past the viewport and allow long labels */
+.sf-nav-dropdown {
+  white-space: nowrap;
+  min-width: max-content;
+  max-width: calc(100vw - 2rem);
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+/* If dropdown would overflow to the right in narrow containers, allow it to anchor to the right
+   by adding the class `right-align` to the parent `.sf-nav-item` in the HTML markup when needed. */
+.sf-nav-item.right-align .sf-nav-dropdown {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
+}
+
+.sf-nav-button[aria-expanded="true"] + .sf-nav-dropdown {
+  display: block;
+}
+
+.sf-nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #080707;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #edf4fe;
+}
+
+.sf-nav-link:last-child {
+  border-bottom: none;
+}
+
+.sf-nav-link:hover {
+  background-color: #edf4fe;
+  color: #0070d2;
+}
+
+/* Ensure it works well with Salesforce's dark theme if applicable */
+@media (prefers-color-scheme: dark) {
+  .sf-custom-nav-bar {
+    background: #16325c;
+    border-bottom-color: #0b2399;
+  }
+  
+  .sf-nav-button,
+  .sf-nav-link {
+    color: #ffffff;
+  }
+  
+  .sf-nav-button:hover,
+  .sf-nav-button[aria-expanded="true"] {
+    background-color: #0b2399;
+  }
+  
+  .sf-nav-dropdown {
+    background: #16325c;
+    border-color: #0b2399;
+  }
+  
+  .sf-nav-link:hover {
+    background-color: #0b2399;
+    color: #57a3fd;
+  }
+  
+  .sf-nav-link {
+    border-bottom-color: #0b2399;
+  }
+}
