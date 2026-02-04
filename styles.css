@@ -13,7 +13,12 @@
 
 .sf-nav-item {
   position: relative;
-  margin-right: 0.5rem;
+  margin-right: 0;
+  border-right: 1px solid #c9c9c9;
+}
+
+.sf-nav-item:last-child {
+  border-right: none;
 }
 
 .sf-nav-button {
@@ -22,10 +27,15 @@
   color: #080707;
   font-size: 13px;
   font-weight: 400;
-  padding: 0.60rem 1rem 0.60rem 1rem; 
+  padding: 0.60rem 0.5rem 0.60rem 0.5rem; 
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 85px;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: background-color 0.2s ease;
   white-space: nowrap;
 }
