@@ -9,7 +9,10 @@
   "content_scripts": [
     {
       "matches": [
-        "https://mutualofamerica.my.salesforce-setup.com/*"
+        "https://mutualofamerica.my.salesforce-setup.com/*",
+        "https://mutualofamerica--dev.sandbox.my.salesforce-setup.com/*",
+        "https://mutualofamerica--test.sandbox.my.salesforce-setup.com/*",
+        "https://mutualofamerica--pat.sandbox.my.salesforce-setup.com/*"
       ],
       "js": ["config.js", "content.js"],
       "css": ["styles.css"],
