@@ -46,6 +46,14 @@ function initializeMenu() {
   } else {
     console.log('[SF Nav] Menu already exists');
   }
+
+  // Fallback: if no container found within a short time, inject at top of body
+  setTimeout(() => {
+    if (!document.getElementById('sf-custom-nav')) {
+      console.warn('[SF Nav] No setup container found after timeout — injecting fallback menu at top of body');
+      injectMenu(null);
+    }
+  }, 3000);
 }
 
 function findSetupContainer() {
@@ -73,7 +81,7 @@ function findSetupContainer() {
 }
 
 function injectMenu(container) {
-  console.log('[SF Nav] Injecting menu after container:', container);
+  console.log('[SF Nav] Injecting menu (container):', container);
   
   // Create menu container
   const menuBar = document.createElement('div');
@@ -257,6 +265,15 @@ function injectMenu(container) {
 
     settingsItem.appendChild(settingsButton);
     settingsItem.appendChild(settingsDropdown);
+    // Open settings dropdown on hover as well (desktop)
+    settingsItem.addEventListener('mouseenter', () => {
+      document.querySelectorAll('.sf-nav-item.open').forEach(mi => mi.classList.remove('open'));
+      settingsItem.classList.add('open');
+    });
+    settingsItem.addEventListener('mouseleave', () => {
+      settingsItem.classList.remove('open');
+    });
+
     menuBar.appendChild(settingsItem);
   } catch (err) {
     console.error('[SF Nav] Failed to add Settings dropdown', err);
@@ -267,14 +284,14 @@ function injectMenu(container) {
   console.log('[SF Nav] Created menu bar:', menuBar);
   console.log('[SF Nav] Menu has', menuConfig.length, 'groups');
   
-  // Insert the menu
-  // Try to insert it after the existing navigation
-  if (container.parentNode) {
+  // Insert the menu. If a valid container with a parent is provided, insert after it.
+  // Otherwise fall back to inserting at the top of the body.
+  if (container && container.parentNode) {
     container.parentNode.insertBefore(menuBar, container.nextSibling);
     console.log('[SF Nav] Inserted menu after container');
   } else {
     document.body.insertBefore(menuBar, document.body.firstChild);
-    console.log('[SF Nav] Inserted menu at top of body');
+    console.log('[SF Nav] Inserted menu at top of body (fallback)');
   }
   
   console.log('[SF Nav] Menu injected successfully');
@@ -319,6 +336,16 @@ function createMenuItem(menuGroup) {
     } else {
       menuItem.classList.remove('open');
     }
+  });
+
+  // Open on hover (desktop): entering the item opens it; leaving closes it
+  menuItem.addEventListener('mouseenter', () => {
+    document.querySelectorAll('.sf-nav-item.open').forEach(mi => mi.classList.remove('open'));
+    menuItem.classList.add('open');
+  });
+
+  menuItem.addEventListener('mouseleave', () => {
+    menuItem.classList.remove('open');
   });
   
   menuItem.appendChild(menuButton);
