@@ -95,6 +95,7 @@
   text-decoration: none;
   font-size: 13px;
   transition: background-color 0.2s ease;
+    border-left: 3px solid #fff;
 }
 
 .sf-nav-link:last-child {
@@ -105,4 +106,22 @@
   background-color: #edf4fe;
   color: #0070d2;
   text-decoration: none;
+  border-left: 3px solid #5193f8;
 }
+
+/* Settings admin styles */
+.sf-settings-admin { font-size:13px; color:#0b2545 }
+.sf-settings-group { border:1px solid #e6e6e6; padding:10px; margin-bottom:8px; border-radius:6px; background:#fff }
+.sf-settings-group-header { display:flex; gap:8px; align-items:center; margin-bottom:8px }
+.sf-settings-group-title { flex:1; padding:6px 8px; border:1px solid #ddd; border-radius:4px }
+.sf-settings-items { display:flex; flex-direction:column; gap:8px }
+.sf-settings-item { display:flex; gap:8px; align-items:center }
+.sf-settings-item-label { width:35%; padding:6px 8px; border:1px solid #ddd; border-radius:4px }
+.sf-settings-item-path { flex:1; padding:6px 8px; border:1px solid #ddd; border-radius:4px }
+.sf-btn { padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:#f7f7f7; cursor:pointer }
+.sf-btn-primary { background:#0070d2; color:#fff; border:none }
+.sf-btn-secondary { background:#eef6ff; border:1px solid #c9e0ff }
+.sf-btn-small { padding:4px 6px; border-radius:4px; margin-left:6px; cursor:pointer }
+.sf-btn-danger { background:#ffecec; border:1px solid #f0b3b3 }
+
+.sf-settings-dropdown .sf-settings-admin { min-width:420px }
