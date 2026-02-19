@@ -27,7 +27,7 @@
   color: #080707;
   font-size: 13px;
   font-weight: 400;
-  padding: 6px 6px;
+  padding: 0px 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -92,6 +92,8 @@
   font-size: var(--slds-g-font-scale-neg-1, var(--lwc-fontSizeSmall, 0.75rem));
   transition: background-color 0.16s ease;
   border-left: 3px solid #fff;
+  height: 36px;
+  padding-top: 10px;
 }
 
 .sf-nav-link:last-child {
