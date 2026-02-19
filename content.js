@@ -80,6 +80,44 @@ function findSetupContainer() {
   return null;
 }
 
+// Try to determine the active setup path. Salesforce may load setup pages inside
+// an iframe, so check the top-level pathname first and then try visible iframes.
+function getActiveSetupPath() {
+  try {
+    const topPath = window.location && window.location.pathname ? window.location.pathname : '';
+    if (topPath.indexOf('/lightning/setup/') === 0) return topPath;
+
+    // Look for iframes whose src contains the setup path
+    const iframes = Array.from(document.querySelectorAll('iframe'));
+    for (const fr of iframes) {
+      try {
+        // Prefer the src attribute (doesn't require same-origin), fallback to contentWindow.location
+        const src = fr.getAttribute('src') || '';
+        if (src.indexOf('/lightning/setup/') !== -1) {
+          // Normalize to a pathname if possible
+          try {
+            const u = new URL(src, window.location.origin);
+            return u.pathname + (u.search || '');
+          } catch (e) {
+            return src;
+          }
+        }
+
+        // If same-origin, try reading the iframe location directly
+        if (fr.contentWindow && fr.contentWindow.location) {
+          const p = fr.contentWindow.location.pathname || '';
+          if (p.indexOf('/lightning/setup/') === 0) return p;
+        }
+      } catch (err) {
+        // Ignore access errors for cross-origin iframes
+      }
+    }
+  } catch (err) {
+    console.warn('[SF Nav] getActiveSetupPath failed', err);
+  }
+  return window.location.pathname || '';
+}
+
 function injectMenu(container) {
   console.log('[SF Nav] Injecting menu (container):', container);
   
@@ -96,23 +134,19 @@ function injectMenu(container) {
 
   // Add a stateful star button for adding/removing the current Setup page
   try {
-    const currentPath = window.location.pathname || '';
+      // Determine the active setup path (may be in an iframe)
+      const currentPath = getActiveSetupPath();
     const isSetup = currentPath.indexOf('/lightning/setup/') === 0;
     if (isSetup) {
-      // find if this page exists in the config
-      let existing = { found: false, group: -1, index: -1 };
-      for (let gi = 0; gi < menuConfig.length; gi++) {
-        const ii = (menuConfig[gi].items || []).findIndex(it => it.path === currentPath);
-        if (ii !== -1) { existing = { found: true, group: gi, index: ii }; break; }
-      }
-
       const starWrapper = document.createElement('div');
       starWrapper.className = 'sf-nav-item';
 
       const starBtn = document.createElement('button');
       starBtn.className = 'sf-nav-button';
-      starBtn.title = existing.found ? 'Remove from menu' : 'Add this Setup page to menu';
+      // default state; updateStarState() will set the live title
+      starBtn.title = 'Add this Setup page to menu';
       starBtn.style.width = '40px';
+      starBtn.style.height = '37px';
       starBtn.style.display = 'flex';
       starBtn.style.alignItems = 'center';
       starBtn.style.justifyContent = 'center';
@@ -122,7 +156,8 @@ function injectMenu(container) {
       starSvg.setAttribute('width', '16');
       starSvg.setAttribute('height', '16');
       starSvg.style.display = 'block';
-      starSvg.style.fill = existing.found ? '#f6c600' : 'none';
+      // default empty fill; updateStarState() will set the live fill
+      starSvg.style.fill = 'none';
       starSvg.style.stroke = '#666';
       starSvg.style.strokeWidth = '1';
       const starPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -131,12 +166,47 @@ function injectMenu(container) {
 
       starBtn.appendChild(starSvg);
 
+      // Update star appearance/state based on the current active setup path. We
+      // poll because Salesforce may navigate inside an iframe without changing
+      // the top window location.
+      function updateStarState() {
+        const pathNow = getActiveSetupPath();
+        let found = false, g = -1, iidx = -1;
+        for (let gi = 0; gi < menuConfig.length; gi++) {
+          const ii = (menuConfig[gi].items || []).findIndex(it => it.path === pathNow);
+          if (ii !== -1) { found = true; g = gi; iidx = ii; break; }
+        }
+        starSvg.style.fill = found ? '#f6c600' : 'none';
+        starBtn.title = found ? 'Remove from menu' : 'Add this Setup page to menu';
+        // store indices for use by click handler
+        starWrapper.dataset._sf_found = found ? '1' : '0';
+        starWrapper.dataset._sf_group = String(g);
+        starWrapper.dataset._sf_index = String(iidx);
+      }
+
+      updateStarState();
+
+      const pollId = setInterval(() => {
+        if (!starWrapper.isConnected) return; // will be cleared by observer when removed
+        updateStarState();
+      }, 1000);
+
+      // When the star wrapper is removed from DOM, clear the poll
+      const removalObserver = new MutationObserver(() => {
+        if (!starWrapper.isConnected) {
+          clearInterval(pollId);
+          removalObserver.disconnect();
+        }
+      });
+      removalObserver.observe(document.body, { childList: true, subtree: true });
+
       starBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        // refresh existence
+        // Use the live path at click time
+        const pathAtClick = getActiveSetupPath();
         let ex = { found: false, group: -1, index: -1 };
         for (let gi = 0; gi < menuConfig.length; gi++) {
-          const ii = (menuConfig[gi].items || []).findIndex(it => it.path === currentPath);
+          const ii = (menuConfig[gi].items || []).findIndex(it => it.path === pathAtClick);
           if (ii !== -1) { ex = { found: true, group: gi, index: ii }; break; }
         }
 
@@ -148,7 +218,7 @@ function injectMenu(container) {
             starSvg.style.fill = 'none';
           });
         } else {
-          openAddPageModal(currentPath);
+          openAddPageModal(pathAtClick);
         }
       });
 

@@ -23,26 +23,24 @@
 
 .sf-nav-button {
   background: transparent;
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
-  border-bottom: 0;
+  border: none;
   color: #080707;
   font-size: 13px;
   font-weight: 400;
-  padding: 8px 8px 8px 8px; 
+  padding: 6px 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 85px;
+  width: 78px;
+  height: 37px;
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.18s ease;
   white-space: nowrap;
-    border-top: 3px solid #5194f800;
+  border-top: 3px solid transparent;
 }
 
 .sf-nav-button::after {
@@ -75,12 +73,11 @@
   left: 0;
   background: #ffffff;
   border: 1px solid #dddbda;
-  border-radius: 0.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 0;
+  box-shadow: 0 6px 18px rgba(11, 37, 69, 0.06);
   min-width: 200px;
   display: none;
   z-index: 10000;
-  /* margin-top: 2px; */
 }
 
 .sf-nav-item.open .sf-nav-dropdown {
@@ -89,12 +86,12 @@
 
 .sf-nav-link {
   display: block;
-  padding: 0.50rem 1rem;
+  padding: 0.4rem 0.75rem;
   color: #080707;
   text-decoration: none;
-  font-size: 13px;
-  transition: background-color 0.2s ease;
-    border-left: 3px solid #fff;
+  font-size: var(--slds-g-font-scale-neg-1, var(--lwc-fontSizeSmall, 0.75rem));
+  transition: background-color 0.16s ease;
+  border-left: 3px solid #fff;
 }
 
 .sf-nav-link:last-child {
@@ -108,20 +105,23 @@
   border-left: 3px solid #5193f8;
 }
 
+.sf-injected-menu-item {
+
+}
+
 /* Settings admin styles */
 .sf-settings-admin { font-size:13px; color:#0b2545 }
-.sf-settings-group { border:1px solid #e6e6e6; padding:10px; margin-bottom:8px; border-radius:6px; background:#fff }
-.sf-settings-group-header { display:flex; gap:8px; align-items:center; margin-bottom:8px }
-.sf-settings-group-title { flex:1; padding:6px 8px; border:1px solid #ddd; border-radius:4px }
-.sf-settings-items { display:flex; flex-direction:column; gap:8px }
-.sf-settings-item { display:flex; gap:8px; align-items:center }
-.sf-settings-item-label { width:35%; padding:6px 8px; border:1px solid #ddd; border-radius:4px }
-.sf-settings-item-path { flex:1; padding:6px 8px; border:1px solid #ddd; border-radius:4px }
-.sf-btn { padding:6px 10px; border-radius:6px; border:1px solid #ddd; background:#f7f7f7; cursor:pointer }
+.sf-settings-group { border:1px solid #e6e6e6; padding:8px; margin-bottom:6px; border-radius:0; background:#fff }
+.sf-settings-group-header { display:flex; gap:8px; align-items:center; margin-bottom:6px }
+.sf-settings-group-title { flex:1; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
+.sf-settings-items { display:flex; flex-direction:column; gap:6px }
+.sf-settings-item { display:flex; gap:6px; align-items:center }
+.sf-settings-item-label { width:35%; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
+.sf-settings-item-path { flex:1; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
+.sf-btn { padding:6px 10px; border-radius:0; border:1px solid #ddd; background:#f7f7f7; cursor:pointer }
 .sf-btn-primary { background:#0070d2; color:#fff; border:none }
 .sf-btn-secondary { background:#eef6ff; border:1px solid #c9e0ff }
-.sf-btn-small { padding:4px 6px; border-radius:4px; margin-left:6px; cursor:pointer }
+.sf-btn-small { padding:4px 6px; border-radius:0; margin-left:6px; cursor:pointer }
 .sf-btn-danger { background:#ffecec; border:1px solid #f0b3b3 }
-
-.sf-settings-dropdown .sf-settings-admin { min-width:420px }
+.sf-settings-dropdown .sf-settings-admin { min-width:380px }
 
