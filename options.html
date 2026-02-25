@@ -5,20 +5,56 @@
     <title>Salesforce Setup Navigator — Options</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <style>
-      :root{font-family:system-ui,Segoe UI,Arial,sans-serif;color:#0b2545}
-      body{max-width:900px;margin:16px;padding:12px;border:1px solid #e6e6e6;border-radius:0}
-      h1{margin:0 0 8px;font-size:20px;color:#0070d2}
-      p.lead{margin:0 0 14px;color:#333}
-      textarea{width:100%;min-height:320px;font-family:monospace;font-size:13px;padding:8px;border:1px solid #ddd;border-radius:0;box-sizing:border-box}
-      .controls{margin-top:10px;display:flex;gap:8px}
-      button{padding:7px 12px;border-radius:0;border:none;cursor:pointer;font-weight:600}
-      button.save{background:#0070d2;color:#fff}
-      button.reset{background:#f3f3f3;border:1px solid #ddd}
-      .message{margin-top:10px;padding:8px;border-radius:0;display:none}
+      :root{
+        --bg:#ffffff;
+        --muted:#6b7280;
+        --accent:#0070d2;
+        --card-border:#e6e6e6;
+        font-family:system-ui,"Segoe UI",Arial,sans-serif;
+        color:#0b2545;
+      }
+      html,body{height:100%;background:#f6f8fb}
+      body{
+        max-width:980px;margin:24px auto;padding:20px;background:var(--bg);
+        border:1px solid var(--card-border);border-radius:8px;box-shadow:0 6px 18px rgba(11,37,69,0.06)
+      }
+      header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+      h1{margin:0;font-size:20px;color:var(--accent);font-weight:700}
+      p.lead{margin:6px 0 14px;color:var(--muted);max-width:70%}
+
+      label{display:block;margin-bottom:8px;font-weight:700;color:#253858}
+
+      textarea{
+        width:100%;min-height:360px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+        font-size:13px;padding:12px;border:1px solid #e3e8ef;border-radius:6px;box-sizing:border-box;
+        background:linear-gradient(180deg,#fff,#fbfdff);
+        box-shadow:inset 0 1px 0 rgba(16,24,40,0.02)
+      }
+
+      .controls{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+      button{padding:8px 14px;border-radius:6px;border:1px solid transparent;cursor:pointer;font-weight:700;letter-spacing:0.2px}
+      button.save{background:var(--accent);color:#fff;border-color:rgba(0,112,210,0.15)}
+      button.save:hover{filter:brightness(.96)}
+      button.reset{background:#fff;border:1px solid #e6eef8;color:#18345a}
+      button.reset:hover{background:#fbfdff}
+      button.export{background:#f3f6fb;border:1px solid #e2e9f6;color:#0b2545}
+
+      .message{margin-top:12px;padding:10px;border-radius:6px;display:none}
       .message.success{background:#e6ffed;border:1px solid #bde5c9;color:#1f6f3d}
-      .message.error{background:#ffecec;border:1px solid #f0b3b3;color:#8b1b1b}
-      .note{margin-top:12px;font-size:13px;color:#444}
-      label{display:block;margin-bottom:6px;font-weight:600}
+      .message.error{background:#fff0f0;border:1px solid #f0b3b3;color:#8b1b1b}
+
+      .note{margin-top:12px;font-size:13px;color:var(--muted)}
+
+      /* Small helpers */
+      .top-actions{display:flex;gap:8px;align-items:center}
+
+      @media (max-width:640px){
+        body{margin:12px}
+        p.lead{max-width:100%}
+        .controls{flex-direction:column;align-items:stretch}
+        .top-actions{flex-wrap:wrap}
+      }
     </style>
   </head>
   <body>
@@ -26,7 +62,7 @@
     <p class="lead">Edit your menu configuration as JSON. Each group needs a <code>title</code> and <code>items</code> array with <code>label</code> and <code>path</code>.</p>
 
     <label for="config">Menu configuration (JSON)</label>
-    <textarea id="config" placeholder='[ { "title": "Users", "items": [ { "label": "Users", "path": "/lightning/setup/..." } ] } ]'></textarea>
+    <textarea id="config" placeholder='[ { "title": "Users", "items": [ { "label": "Users", "path": "ManageUsers/home" } ] } ]'></textarea>
 
     <div class="controls">
       <button id="save" class="save">Save Configuration</button>

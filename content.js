@@ -1,6 +1,15 @@
 // Load menu configuration
 let menuConfig = DEFAULT_MENU_CONFIG;
 
+// Base path for all configured items. Config stores paths relative to this.
+const SF_SETUP_BASE = '/lightning/setup/';
+
+function resolveConfigPath(p){
+  if(!p) return SF_SETUP_BASE;
+  if(p.indexOf(SF_SETUP_BASE) === 0) return p;
+  return SF_SETUP_BASE + String(p).replace(/^\/+/, '');
+}
+
 console.log('[SF Nav] Extension loaded');
 console.log('[SF Nav] Default config:', DEFAULT_MENU_CONFIG);
 
@@ -173,7 +182,7 @@ function injectMenu(container) {
         const pathNow = getActiveSetupPath();
         let found = false, g = -1, iidx = -1;
         for (let gi = 0; gi < menuConfig.length; gi++) {
-          const ii = (menuConfig[gi].items || []).findIndex(it => it.path === pathNow);
+          const ii = (menuConfig[gi].items || []).findIndex(it => resolveConfigPath(it.path) === pathNow);
           if (ii !== -1) { found = true; g = gi; iidx = ii; break; }
         }
         starSvg.style.fill = found ? '#f6c600' : 'none';
@@ -206,7 +215,7 @@ function injectMenu(container) {
         const pathAtClick = getActiveSetupPath();
         let ex = { found: false, group: -1, index: -1 };
         for (let gi = 0; gi < menuConfig.length; gi++) {
-          const ii = (menuConfig[gi].items || []).findIndex(it => it.path === pathAtClick);
+          const ii = (menuConfig[gi].items || []).findIndex(it => resolveConfigPath(it.path) === pathAtClick);
           if (ii !== -1) { ex = { found: true, group: gi, index: ii }; break; }
         }
 
@@ -378,7 +387,7 @@ function injectMenu(container) {
 
           upG.addEventListener('click', () => { if (gi>0) { const a=menuConfig.splice(gi,1)[0]; menuConfig.splice(gi-1,0,a); window.renderSettingsAdmin(); }});
           downG.addEventListener('click', () => { if (gi<menuConfig.length-1) { const a=menuConfig.splice(gi,1)[0]; menuConfig.splice(gi+1,0,a); window.renderSettingsAdmin(); }});
-          addItemBtn.addEventListener('click', () => { menuConfig[gi].items.push({ label: 'New item', path: '/lightning/setup/' }); window.renderSettingsAdmin(); });
+          addItemBtn.addEventListener('click', () => { menuConfig[gi].items.push({ label: 'New item', path: '' }); window.renderSettingsAdmin(); });
           removeG.addEventListener('click', () => { if (confirm('Remove group "' + (group.title||'') + '"?')){ menuConfig.splice(gi,1); window.renderSettingsAdmin(); }});
 
           gControls.appendChild(upG); gControls.appendChild(downG); gControls.appendChild(addItemBtn); gControls.appendChild(removeG);
@@ -394,7 +403,7 @@ function injectMenu(container) {
             itemRow.className = 'sf-settings-item';
 
             const labelInput = document.createElement('input'); labelInput.type='text'; labelInput.value = it.label || ''; labelInput.placeholder='Label'; labelInput.className='sf-settings-item-label';
-            const pathInput = document.createElement('input'); pathInput.type='text'; pathInput.value = it.path || ''; pathInput.placeholder='/lightning/setup/...'; pathInput.className='sf-settings-item-path';
+            const pathInput = document.createElement('input'); pathInput.type='text'; pathInput.value = it.path || ''; pathInput.placeholder='ManageUsers/home (relative to /lightning/setup/)'; pathInput.className='sf-settings-item-path';
 
             labelInput.addEventListener('input', () => { menuConfig[gi].items[ii].label = labelInput.value; });
             pathInput.addEventListener('input', () => { menuConfig[gi].items[ii].path = pathInput.value; });
@@ -430,6 +439,19 @@ function injectMenu(container) {
             if (!group.title || !Array.isArray(group.items)) throw new Error(`Group ${gi} must have title and items`);
             group.items.forEach((it, ii) => {
               if (!it.label || !it.path) throw new Error(`Item ${ii} in group ${gi} must have label and path`);
+            });
+          });
+
+          // Normalize stored paths to be relative to SF_SETUP_BASE
+          menuConfig.forEach(group => {
+            (group.items || []).forEach(it => {
+              if (typeof it.path === 'string') {
+                if (it.path.indexOf(SF_SETUP_BASE) === 0) {
+                  it.path = it.path.replace(new RegExp('^' + SF_SETUP_BASE.replace(/\//g,'\\/')), '');
+                } else if (it.path.indexOf('/') === 0) {
+                  it.path = it.path.replace(/^\/+/, '');
+                }
+              }
             });
           });
 
@@ -539,11 +561,12 @@ function createMenuItem(menuGroup) {
   menuGroup.items.forEach(item => {
     const link = document.createElement('a');
     link.className = 'sf-nav-link';
-    link.href = item.path;
+    const full = resolveConfigPath(item.path);
+    link.href = full;
     link.textContent = item.label;
     link.addEventListener('click', (e) => {
       e.preventDefault();
-      window.location.href = item.path;
+      window.location.href = full;
     });
     dropdown.appendChild(link);
   });
@@ -633,7 +656,7 @@ function openAddPageModal(pagePath) {
   // Detect if page already exists in config and store indices on modal
   let existingGroup = -1, existingItem = -1;
   for (let gi = 0; gi < menuConfig.length; gi++) {
-    const ii = menuConfig[gi].items.findIndex(it => it.path === pagePath);
+    const ii = menuConfig[gi].items.findIndex(it => resolveConfigPath(it.path) === pagePath);
     if (ii !== -1) {
       existingGroup = gi; existingItem = ii; break;
     }
@@ -725,7 +748,7 @@ function buildAddPageModal() {
     }
 
     // Prevent duplicates
-    const already = menuConfig.some(g => g.items.some(it => it.path === path));
+    const already = menuConfig.some(g => g.items.some(it => resolveConfigPath(it.path) === path));
     if (already) {
       const msg = modal.querySelector('#sf-add-page-message');
       msg.textContent = 'This page is already in your configuration';
@@ -738,13 +761,16 @@ function buildAddPageModal() {
     try {
       const exGroupAttr = modal.dataset.existingGroup;
       const exItemAttr = modal.dataset.existingItem;
+      // Convert full path to relative for storage
+      const relPath = (path.indexOf(SF_SETUP_BASE) === 0) ? path.replace(SF_SETUP_BASE, '') : path.replace(/^\/+/, '');
+
       if (typeof exGroupAttr !== 'undefined' && typeof exItemAttr !== 'undefined') {
         const exG = parseInt(exGroupAttr, 10);
         const exI = parseInt(exItemAttr, 10);
 
-        if (!menuConfig[exG] || !menuConfig[exG].items[exI] || menuConfig[exG].items[exI].path !== path) {
+        if (!menuConfig[exG] || !menuConfig[exG].items[exI] || resolveConfigPath(menuConfig[exG].items[exI].path) !== path) {
           // existing entry no longer valid (changed elsewhere) — fall back to add
-          menuConfig[idx].items.push({ label: label, path: path });
+          menuConfig[idx].items.push({ label: label, path: relPath });
         } else {
           if (idx === exG) {
             // Update label in same group
@@ -758,7 +784,7 @@ function buildAddPageModal() {
         }
       } else {
         // New entry
-        menuConfig[idx].items.push({ label: label, path: path });
+        menuConfig[idx].items.push({ label: label, path: relPath });
       }
 
       chrome.storage.sync.set({ menuConfig: menuConfig }, () => {

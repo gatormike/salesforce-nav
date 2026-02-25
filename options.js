@@ -41,6 +41,19 @@
           });
         });
 
+        // Normalize paths: store them relative to '/lightning/setup/' (remove leading /lightning/setup/ or leading slash)
+        parsed.forEach(group => {
+          (group.items || []).forEach(it => {
+            if (typeof it.path === 'string') {
+              if (it.path.indexOf('/lightning/setup/') === 0) {
+                it.path = it.path.replace(/^\/lightning\/setup\//, '');
+              } else if (it.path.indexOf('/') === 0) {
+                it.path = it.path.replace(/^\/+/, '');
+              }
+            }
+          });
+        });
+
         chrome.storage.sync.set({ menuConfig: parsed }, ()=>{
           showMessage('Configuration saved', 'success');
         });

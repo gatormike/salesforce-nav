@@ -3,15 +3,19 @@ const DEFAULT_MENU_CONFIG = [
     "items": [
       {
         "label": "Users",
-        "path": "/lightning/setup/ManageUsers/home"
+        "path": "ManageUsers/home"
       },
       {
         "label": "Profiles",
-        "path": "/lightning/setup/EnhancedProfiles/home"
+        "path": "EnhancedProfiles/home"
       },
       {
         "label": "Permission Sets",
-        "path": "/lightning/setup/PermSets/home"
+        "path": "PermSets/home"
+      },
+      {
+        "label": "Territory Models",
+        "path": "Territory2Models/page"
       }
     ],
     "title": "Users"
@@ -20,23 +24,27 @@ const DEFAULT_MENU_CONFIG = [
     "items": [
       {
         "label": "Apex Classes",
-        "path": "/lightning/setup/ApexClasses/home"
+        "path": "ApexClasses/home"
       },
       {
         "label": "Apex Testing",
-        "path": "/lightning/setup/ApexTestQueue/home"
+        "path": "ApexTestQueue/home"
       },
       {
         "label": "LWC",
-        "path": "/lightning/setup/LightningComponentBundles/home"
+        "path": "LightningComponentBundles/home"
       },
       {
         "label": "Custom Metadata Types",
-        "path": "/lightning/setup/CustomMetadata/home"
+        "path": "CustomMetadata/home"
       },
       {
         "label": "App Manager",
-        "path": "/lightning/setup/NavigationMenus/home"
+        "path": "NavigationMenus/home"
+      },
+      {
+        "label": "Flows",
+        "path": "Flows/home"
       }
     ],
     "title": "Code"
@@ -45,11 +53,15 @@ const DEFAULT_MENU_CONFIG = [
     "items": [
       {
         "label": "Account",
-        "path": "/lightning/setup/ObjectManager/Account/Details/view"
+        "path": "ObjectManager/Account/FieldsAndRelationships/view"
       },
       {
         "label": "Plan",
-        "path": "/lightning/setup/ObjectManager/01I0h000000fETd/Details/view"
+        "path": "ObjectManager/01I0h000000fETd/FieldsAndRelationships/view"
+      },
+      {
+        "label": "Case",
+        "path": "ObjectManager/Case/FieldsAndRelationships/view"
       }
     ],
     "title": "Objects"
@@ -58,11 +70,11 @@ const DEFAULT_MENU_CONFIG = [
     "items": [
       {
         "label": "Scheduled",
-        "path": "/lightning/setup/ScheduledJobs/home"
+        "path": "ScheduledJobs/home"
       },
       {
         "label": "Bulk Data Load",
-        "path": "/lightning/setup/AsyncApiJobStatus/home"
+        "path": "AsyncApiJobStatus/home"
       }
     ],
     "title": "Jobs"
@@ -71,15 +83,27 @@ const DEFAULT_MENU_CONFIG = [
     "items": [
       {
         "label": "Transaction Security Policies",
-        "path": "/lightning/setup/TransactionSecurityNew/home"
+        "path": "TransactionSecurityNew/home"
       },
       {
         "label": "Event Manager",
-        "path": "/lightning/setup/EventManager/home"
+        "path": "EventManager/home"
       },
       {
         "label": "Event Log File Browser",
-        "path": "/lightning/setup/ElfBrowser/home"
+        "path": "ElfBrowser/home"
+      },
+      {
+        "label": "Sharing Settings",
+        "path": "SecuritySharing/home"
+      },
+      {
+        "label": "Connected Apps OAuth Usage",
+        "path": "ConnectedAppsUsage/home"
+      },
+      {
+        "label": "Manage Connected Apps",
+        "path": "ConnectedApplication/home"
       }
     ],
     "title": "Security"
@@ -88,9 +112,24 @@ const DEFAULT_MENU_CONFIG = [
     "items": [
       {
         "label": "Company Info",
-        "path": "/lightning/setup/CompanyProfileInfo/home"
+        "path": "CompanyProfileInfo/home"
+      },
+      {
+        "label": "Storage Usage",
+        "path": "CompanyResourceDisk/home"
+      },
+      {
+        "label": "Sandboxes",
+        "path": "DataManagementCreateTestInstance/home"
+      },
+      {
+        "label": "View Setup Audit Trail",
+        "path": "SecurityEvents/home"
       }
     ],
     "title": "Platform"
   }
-];
+]
+
+// Expose for pages that expect window.DEFAULT_MENU_CONFIG
+if (typeof window !== 'undefined') window.DEFAULT_MENU_CONFIG = DEFAULT_MENU_CONFIG;
