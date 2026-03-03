@@ -41,6 +41,10 @@ function openSettingsModal(menuConfig, onConfigChange) {
   if (!modal) return;
 
   modal.style.display = 'flex';
+  // Trigger animation
+  requestAnimationFrame(() => {
+    modal.classList.add('show');
+  });
   renderSettingsAdmin(menuConfig, onConfigChange);
 }
 
@@ -49,7 +53,13 @@ function openSettingsModal(menuConfig, onConfigChange) {
  */
 function closeSettingsModal() {
   const modal = document.getElementById(SETTINGS_MODAL_ID);
-  if (modal) modal.style.display = 'none';
+  if (!modal) return;
+
+  // Animate out
+  modal.classList.remove('show');
+  setTimeout(() => {
+    modal.style.display = 'none';
+  }, 200);
 }
 
 /**
@@ -71,19 +81,29 @@ function buildSettingsModal(menuConfig, onConfigChange) {
   const header = document.createElement('div');
   header.className = 'sf-settings-header';
 
+  const headerContent = document.createElement('div');
+  headerContent.className = 'sf-settings-header-content';
+
+  const title = document.createElement('h2');
+  title.className = 'sf-settings-title';
+  title.textContent = 'Menu Configuration';
+
   const info = document.createElement('div');
   info.className = 'sf-settings-info';
-  info.textContent = 'Manage your menu groups and items. Add, edit, reorder, and save.';
+  info.textContent = 'Manage your menu groups and items. Drag to reorder, click buttons to add or remove.';
+
+  headerContent.appendChild(title);
+  headerContent.appendChild(info);
 
   const addGroupBtn = document.createElement('button');
-  addGroupBtn.textContent = 'Add Group';
+  addGroupBtn.innerHTML = '+ Add Group';
   addGroupBtn.className = 'sf-btn sf-btn-secondary';
   addGroupBtn.addEventListener('click', () => {
     menuConfig.push({ title: 'New Group', items: [] });
     renderSettingsAdmin(menuConfig, onConfigChange);
   });
 
-  header.appendChild(info);
+  header.appendChild(headerContent);
   header.appendChild(addGroupBtn);
 
   const groupsList = document.createElement('div');
@@ -158,18 +178,27 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
     const gHeader = document.createElement('div');
     gHeader.className = 'sf-settings-group-header';
 
+    // Add drag handle
+    const dragHandle = document.createElement('div');
+    dragHandle.className = 'sf-settings-drag-handle';
+    dragHandle.innerHTML = '⋮⋮';
+    dragHandle.title = 'Drag to reorder';
+
     const titleInput = document.createElement('input');
     titleInput.type = 'text';
     titleInput.value = group.title || '';
     titleInput.className = 'sf-settings-group-title';
+    titleInput.placeholder = 'Group name...';
     titleInput.addEventListener('input', () => {
       menuConfig[groupIndex].title = titleInput.value;
     });
 
+    gHeader.appendChild(dragHandle);
+
     const gControls = document.createElement('div');
     gControls.className = 'sf-settings-controls';
 
-    const upBtn = createControlButton('↑', 'Move group up', () => {
+    const upBtn = createControlButton('⬆', 'Move group up', () => {
       if (groupIndex > 0) {
         const item = menuConfig.splice(groupIndex, 1)[0];
         menuConfig.splice(groupIndex - 1, 0, item);
@@ -177,7 +206,7 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
       }
     });
 
-    const downBtn = createControlButton('↓', 'Move group down', () => {
+    const downBtn = createControlButton('⬇', 'Move group down', () => {
       if (groupIndex < menuConfig.length - 1) {
         const item = menuConfig.splice(groupIndex, 1)[0];
         menuConfig.splice(groupIndex + 1, 0, item);
@@ -191,7 +220,7 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
     });
 
     const removeBtn = createControlButton(
-      'Remove',
+      '🗑',
       'Remove group',
       () => {
         if (confirm(`Remove group "${group.title || ''}"?`)) {
@@ -217,10 +246,16 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
       const itemRow = document.createElement('div');
       itemRow.className = 'sf-settings-item';
 
+      // Add item drag handle
+      const itemDrag = document.createElement('div');
+      itemDrag.className = 'sf-settings-item-drag';
+      itemDrag.innerHTML = '⋮';
+      itemDrag.title = 'Drag to reorder';
+
       const labelInput = document.createElement('input');
       labelInput.type = 'text';
       labelInput.value = item.label || '';
-      labelInput.placeholder = 'Label';
+      labelInput.placeholder = 'Menu label...';
       labelInput.className = 'sf-settings-item-label';
       labelInput.addEventListener('input', () => {
         menuConfig[groupIndex].items[itemIndex].label = labelInput.value;
@@ -229,16 +264,18 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
       const pathInput = document.createElement('input');
       pathInput.type = 'text';
       pathInput.value = item.path || '';
-      pathInput.placeholder = 'ManageUsers/home (relative to /lightning/setup/)';
+      pathInput.placeholder = 'ManageUsers/home';
       pathInput.className = 'sf-settings-item-path';
       pathInput.addEventListener('input', () => {
         menuConfig[groupIndex].items[itemIndex].path = pathInput.value;
       });
 
+      itemRow.appendChild(itemDrag);
+
       const itemControls = document.createElement('div');
       itemControls.className = 'sf-settings-item-controls';
 
-      const upItemBtn = createControlButton('↑', 'Move item up', () => {
+      const upItemBtn = createControlButton('⬆', 'Move item up', () => {
         if (itemIndex > 0) {
           const item = menuConfig[groupIndex].items.splice(itemIndex, 1)[0];
           menuConfig[groupIndex].items.splice(itemIndex - 1, 0, item);
@@ -246,7 +283,7 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
         }
       });
 
-      const downItemBtn = createControlButton('↓', 'Move item down', () => {
+      const downItemBtn = createControlButton('⬇', 'Move item down', () => {
         if (itemIndex < menuConfig[groupIndex].items.length - 1) {
           const item = menuConfig[groupIndex].items.splice(itemIndex, 1)[0];
           menuConfig[groupIndex].items.splice(itemIndex + 1, 0, item);
@@ -255,7 +292,7 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
       });
 
       const removeItemBtn = createControlButton(
-        'Remove',
+        '✕',
         'Remove item',
         () => {
           if (confirm(`Remove item "${item.label || ''}"?`)) {
@@ -308,7 +345,8 @@ function createControlButton(text, title, onClick, extraClass = '') {
 async function handleSave(menuConfig, onConfigChange, messageElement) {
   try {
     await saveMenuConfig(menuConfig);
-    showMessage(messageElement, 'Configuration saved', 'success');
+    messageElement.textContent = '✓ Configuration saved successfully!';
+    messageElement.className = 'sf-settings-message success';
 
     // Refresh the menu
     removeExistingMenu();
@@ -318,9 +356,15 @@ async function handleSave(menuConfig, onConfigChange, messageElement) {
     }
 
     if (onConfigChange) onConfigChange(menuConfig);
+
+    setTimeout(() => {
+      messageElement.textContent = '';
+      messageElement.className = 'sf-settings-message';
+    }, 3000);
   } catch (err) {
     log('error', 'Save failed:', err);
-    showMessage(messageElement, 'Error: ' + err.message, 'error', 0);
+    messageElement.textContent = '✗ Error: ' + err.message;
+    messageElement.className = 'sf-settings-message error';
   }
 }
 
@@ -331,7 +375,7 @@ async function handleSave(menuConfig, onConfigChange, messageElement) {
  * @param {HTMLElement} messageElement - Message display element
  */
 async function handleReset(menuConfig, onConfigChange, messageElement) {
-  if (!confirm('Reset to default configuration?')) return;
+  if (!confirm('Reset to default configuration? This will delete all your custom menu items.')) return;
 
   try {
     await resetMenuConfig();
@@ -341,13 +385,20 @@ async function handleReset(menuConfig, onConfigChange, messageElement) {
     menuConfig.length = 0;
     menuConfig.push(...defaultConfig);
 
-    showMessage(messageElement, 'Reset to default', 'success');
+    messageElement.textContent = '✓ Configuration reset to defaults';
+    messageElement.className = 'sf-settings-message success';
     renderSettingsAdmin(menuConfig, onConfigChange);
 
     if (onConfigChange) onConfigChange(menuConfig);
+
+    setTimeout(() => {
+      messageElement.textContent = '';
+      messageElement.className = 'sf-settings-message';
+    }, 3000);
   } catch (err) {
     log('error', 'Reset failed:', err);
-    showMessage(messageElement, 'Error: ' + err.message, 'error', 0);
+    messageElement.textContent = '✗ Error: ' + err.message;
+    messageElement.className = 'sf-settings-message error';
   }
 }
 
@@ -369,8 +420,17 @@ function handleExport(menuConfig, messageElement) {
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+
+    messageElement.textContent = '✓ Configuration exported';
+    messageElement.className = 'sf-settings-message success';
+
+    setTimeout(() => {
+      messageElement.textContent = '';
+      messageElement.className = 'sf-settings-message';
+    }, 2000);
   } catch (err) {
     log('error', 'Export failed:', err);
-    showMessage(messageElement, 'Export failed: ' + err.message, 'error', 0);
+    messageElement.textContent = '✗ Export failed: ' + err.message;
+    messageElement.className = 'sf-settings-message error';
   }
 }
