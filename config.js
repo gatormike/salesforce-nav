@@ -1,4 +1,4 @@
-const DEFAULT_MENU_CONFIG = [
+[
   {
     "items": [
       {
@@ -12,6 +12,10 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "Permission Sets",
         "path": "PermSets/home"
+      },
+      {
+        "label": "Queues",
+        "path": "Queues/home"
       },
       {
         "label": "Territory Models",
@@ -47,10 +51,14 @@ const DEFAULT_MENU_CONFIG = [
         "path": "Flows/home"
       }
     ],
-    "title": "Code"
+    "title": "Dev"
   },
   {
     "items": [
+      {
+        "label": "Object Manager",
+        "path": "ObjectManager/home"
+      },
       {
         "label": "Account",
         "path": "ObjectManager/Account/FieldsAndRelationships/view"
@@ -69,12 +77,16 @@ const DEFAULT_MENU_CONFIG = [
   {
     "items": [
       {
-        "label": "Scheduled",
-        "path": "ScheduledJobs/home"
+        "label": "Apex Jobs",
+        "path": "AsyncApexJobs/home"
       },
       {
         "label": "Bulk Data Load",
         "path": "AsyncApiJobStatus/home"
+      },
+      {
+        "label": "Scheduled",
+        "path": "ScheduledJobs/home"
       }
     ],
     "title": "Jobs"
@@ -104,6 +116,14 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "Manage Connected Apps",
         "path": "ConnectedApplication/home"
+      },
+      {
+        "label": "Auth. Providers",
+        "path": "AuthProviders/home"
+      },
+      {
+        "label": "Named Credentials",
+        "path": "NamedCredential/home"
       }
     ],
     "title": "Security"
@@ -125,11 +145,12 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "View Setup Audit Trail",
         "path": "SecurityEvents/home"
+      },
+      {
+        "label": "My Domain",
+        "path": "OrgDomain/home"
       }
     ],
     "title": "Platform"
   }
 ]
-
-// Expose for pages that expect window.DEFAULT_MENU_CONFIG
-if (typeof window !== 'undefined') window.DEFAULT_MENU_CONFIG = DEFAULT_MENU_CONFIG;

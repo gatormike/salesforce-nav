@@ -1,0 +1,1 @@
+1. When the user is browsing, track which pages they go to.  Over time, develop a recommended menu items for items not currently in their menu.
