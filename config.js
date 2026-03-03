@@ -1,4 +1,4 @@
-[
+const DEFAULT_MENU_CONFIG = [
   {
     "items": [
       {
@@ -153,4 +153,4 @@
     ],
     "title": "Platform"
   }
-]
+];
