@@ -108,22 +108,233 @@
 }
 
 .sf-injected-menu-item {
-
+  /* Injected menu items in Salesforce tab bar */
 }
 
-/* Settings admin styles */
-.sf-settings-admin { font-size:13px; color:#0b2545 }
-.sf-settings-group { border:1px solid #e6e6e6; padding:8px; margin-bottom:6px; border-radius:0; background:#fff }
-.sf-settings-group-header { display:flex; gap:8px; align-items:center; margin-bottom:6px }
-.sf-settings-group-title { flex:1; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
-.sf-settings-items { display:flex; flex-direction:column; gap:6px }
-.sf-settings-item { display:flex; gap:6px; align-items:center }
-.sf-settings-item-label { width:35%; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
-.sf-settings-item-path { flex:1; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
-.sf-btn { padding:6px 10px; border-radius:0; border:1px solid #ddd; background:#f7f7f7; cursor:pointer }
-.sf-btn-primary { background:#0070d2; color:#fff; border:none }
-.sf-btn-secondary { background:#eef6ff; border:1px solid #c9e0ff }
-.sf-btn-small { padding:4px 6px; border-radius:0; margin-left:6px; cursor:pointer }
-.sf-btn-danger { background:#ffecec; border:1px solid #f0b3b3 }
-.sf-settings-dropdown .sf-settings-admin { min-width:380px }
+/* Star and Settings buttons */
+.sf-star-button,
+.sf-settings-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-star-button svg {
+  display: block;
+}
+
+/* Modal base styles */
+.sf-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100000;
+}
+
+.sf-modal-box {
+  width: 420px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  font-family: inherit;
+  color: #0b2545;
+}
+
+.sf-settings-box {
+  width: 820px;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.sf-modal-title {
+  margin: 0 0 8px 0;
+  color: #0070d2;
+  font-size: 18px;
+}
+
+.sf-modal-label {
+  display: block;
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.sf-modal-select,
+.sf-modal-input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.sf-modal-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.sf-modal-message {
+  margin-top: 10px;
+  font-size: 13px;
+  min-height: 18px;
+}
+
+/* Settings modal specific */
+.sf-settings-modal {
+  z-index: 100001;
+}
+
+.sf-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.sf-settings-info {
+  font-size: 14px;
+  color: #333;
+}
+
+.sf-settings-groups {
+  max-height: 64vh;
+  overflow: auto;
+  margin-top: 12px;
+}
+
+.sf-settings-group {
+  border: 1px solid #e6e6e6;
+  padding: 8px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.sf-settings-group-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.sf-settings-group-title {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.sf-settings-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.sf-settings-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sf-settings-item {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.sf-settings-item-label {
+  width: 35%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.sf-settings-item-path {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.sf-settings-item-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.sf-settings-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.sf-settings-message {
+  min-width: 180px;
+  text-align: left;
+  margin-right: auto;
+  font-size: 13px;
+}
+
+/* Button styles */
+.sf-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.sf-btn:hover {
+  background: #e9e9e9;
+}
+
+.sf-btn-primary {
+  background: #0070d2;
+  color: #fff;
+  border: none;
+}
+
+.sf-btn-primary:hover {
+  background: #005fb2;
+}
+
+.sf-btn-secondary {
+  background: #eef6ff;
+  border: 1px solid #c9e0ff;
+}
+
+.sf-btn-secondary:hover {
+  background: #d9eaff;
+}
+
+.sf-btn-small {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+}
+
+.sf-btn-small:hover {
+  background: #e9e9e9;
+}
+
+.sf-btn-danger {
+  background: #ffecec;
+  border: 1px solid #f0b3b3;
+}
+
+.sf-btn-danger:hover {
+  background: #ffd6d6;
+}
 

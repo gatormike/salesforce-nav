@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node tests/unit-tests.js)",
+      "Bash(node tests/validate.js)",
+      "Bash(node tests/build-check.js)",
+      "Bash(git add -A)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
