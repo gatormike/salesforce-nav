@@ -1,0 +1,21 @@
+{
+  "name": "salesforce-setup-navigator",
+  "version": "2.0.0",
+  "description": "Chrome extension for enhanced Salesforce Setup navigation",
+  "scripts": {
+    "lint": "eslint *.js src/**/*.js",
+    "lint:fix": "eslint --fix *.js src/**/*.js",
+    "format": "prettier --write \"**/*.{js,json,css,html}\"",
+    "format:check": "prettier --check \"**/*.{js,json,css,html}\"",
+    "validate": "npm run lint && npm run format:check && npm run test",
+    "test": "node tests/validate.js",
+    "test:unit": "node tests/unit-tests.js",
+    "build:check": "node tests/build-check.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

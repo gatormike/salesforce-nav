@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Salesforce Setup Navigator",
-  "version": "1.0",
+  "version": "2.0.0",
   "description": "Enhanced navigation menu for Salesforce Setup",
   "permissions": [
     "storage"
@@ -11,7 +11,7 @@
       "matches": [
         "https://*.my.salesforce-setup.com/*"
       ],
-      "js": ["config.js", "content.js"],
+      "js": ["src/constants.js", "src/utils.js", "src/storage.js", "config.js", "src/menu.js", "src/settings.js", "src/star.js", "content.js"],
       "css": ["styles.css"],
       "run_at": "document_end"
     }

@@ -108,22 +108,420 @@
 }
 
 .sf-injected-menu-item {
-
+  /* Injected menu items in Salesforce tab bar */
 }
 
-/* Settings admin styles */
-.sf-settings-admin { font-size:13px; color:#0b2545 }
-.sf-settings-group { border:1px solid #e6e6e6; padding:8px; margin-bottom:6px; border-radius:0; background:#fff }
-.sf-settings-group-header { display:flex; gap:8px; align-items:center; margin-bottom:6px }
-.sf-settings-group-title { flex:1; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
-.sf-settings-items { display:flex; flex-direction:column; gap:6px }
-.sf-settings-item { display:flex; gap:6px; align-items:center }
-.sf-settings-item-label { width:35%; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
-.sf-settings-item-path { flex:1; padding:6px 6px; border:1px solid #ddd; border-radius:0 }
-.sf-btn { padding:6px 10px; border-radius:0; border:1px solid #ddd; background:#f7f7f7; cursor:pointer }
-.sf-btn-primary { background:#0070d2; color:#fff; border:none }
-.sf-btn-secondary { background:#eef6ff; border:1px solid #c9e0ff }
-.sf-btn-small { padding:4px 6px; border-radius:0; margin-left:6px; cursor:pointer }
-.sf-btn-danger { background:#ffecec; border:1px solid #f0b3b3 }
-.sf-settings-dropdown .sf-settings-admin { min-width:380px }
+/* Star and Settings buttons */
+.sf-star-button,
+.sf-settings-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-star-button svg {
+  display: block;
+}
+
+/* Modal base styles */
+.sf-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sf-modal.show {
+  opacity: 1;
+}
+
+.sf-modal-box {
+  width: 420px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  font-family: inherit;
+  color: #0b2545;
+  transform: scale(0.9);
+  transition: transform 0.2s ease;
+}
+
+.sf-modal.show .sf-modal-box {
+  transform: scale(1);
+}
+
+.sf-settings-box {
+  width: 900px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sf-modal-title {
+  margin: 0 0 8px 0;
+  color: #0070d2;
+  font-size: 18px;
+}
+
+.sf-modal-label {
+  display: block;
+  font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.sf-modal-select,
+.sf-modal-input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.sf-modal-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.sf-modal-message {
+  margin-top: 10px;
+  font-size: 13px;
+  min-height: 18px;
+}
+
+/* Settings modal specific */
+.sf-settings-modal {
+  z-index: 100001;
+}
+
+.sf-settings-admin {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 90vh;
+}
+
+.sf-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f0f4f8;
+  margin-bottom: 20px;
+}
+
+.sf-settings-header-content {
+  flex: 1;
+}
+
+.sf-settings-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0b2545;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sf-settings-title::before {
+  content: '⚙️';
+  font-size: 26px;
+}
+
+.sf-settings-info {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.sf-settings-groups {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px;
+  margin: 0 -4px;
+}
+
+.sf-settings-groups::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sf-settings-groups::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.sf-settings-groups::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.sf-settings-groups::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.sf-settings-group {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.sf-settings-group:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.sf-settings-group-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sf-settings-drag-handle {
+  cursor: grab;
+  color: #94a3b8;
+  font-size: 18px;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.sf-settings-drag-handle:hover {
+  color: #64748b;
+}
+
+.sf-settings-drag-handle:active {
+  cursor: grabbing;
+}
+
+.sf-settings-group-title {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.sf-settings-group-title:focus {
+  outline: none;
+  border-color: #0070d2;
+  box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
+}
+
+.sf-settings-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.sf-settings-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sf-settings-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+  transition: all 0.2s ease;
+}
+
+.sf-settings-item:hover {
+  background: #fff;
+  border-color: #e2e8f0;
+}
+
+.sf-settings-item-drag {
+  cursor: grab;
+  color: #cbd5e1;
+  font-size: 14px;
+  user-select: none;
+}
+
+.sf-settings-item-drag:active {
+  cursor: grabbing;
+}
+
+.sf-settings-item-label {
+  width: 30%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.sf-settings-item-label:focus {
+  outline: none;
+  border-color: #0070d2;
+  box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
+}
+
+.sf-settings-item-path {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.sf-settings-item-path:focus {
+  outline: none;
+  border-color: #0070d2;
+  box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
+}
+
+.sf-settings-item-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.sf-settings-footer {
+  display: flex;
+  gap: 10px;
+  padding-top: 16px;
+  margin-top: 20px;
+  border-top: 2px solid #f0f4f8;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sf-settings-message {
+  flex: 1;
+  min-width: 180px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sf-settings-message.success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.sf-settings-message.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Button styles */
+.sf-btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sf-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.sf-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.sf-btn-primary {
+  background: linear-gradient(135deg, #0070d2 0%, #0061b8 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 112, 210, 0.2);
+}
+
+.sf-btn-primary:hover {
+  background: linear-gradient(135deg, #005fb2 0%, #00529e 100%);
+  box-shadow: 0 4px 12px rgba(0, 112, 210, 0.3);
+}
+
+.sf-btn-secondary {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.sf-btn-secondary:hover {
+  background: linear-gradient(135deg, #e0f2fe 0%, #d0ebfd 100%);
+  border-color: #7dd3fc;
+}
+
+.sf-btn-small {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #64748b;
+  transition: all 0.15s ease;
+}
+
+.sf-btn-small:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+  transform: translateY(-1px);
+}
+
+.sf-btn-small:active {
+  transform: translateY(0);
+}
+
+.sf-btn-danger {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.sf-btn-danger:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #fca5a5;
+}
 
