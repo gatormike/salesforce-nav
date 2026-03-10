@@ -107,16 +107,14 @@
   border-left: 3px solid #5193f8;
 }
 
-.sf-injected-menu-item {
-  /* Injected menu items in Salesforce tab bar */
-}
-
 /* Star and Settings buttons */
 .sf-star-button,
 .sf-settings-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 50px;
+  border-right: solid 1px rgb(201 201 201);
 }
 
 .sf-star-button svg {
@@ -213,6 +211,7 @@
   flex-direction: column;
   height: 100%;
   max-height: 90vh;
+  min-height: 0;
 }
 
 .sf-settings-header {
@@ -255,6 +254,7 @@
   overflow-x: hidden;
   padding: 4px;
   margin: 0 -4px;
+  min-height: 0;
 }
 
 .sf-settings-groups::-webkit-scrollbar {
@@ -418,6 +418,7 @@
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
+  flex: 0 0 auto;
 }
 
 .sf-settings-message {
