@@ -161,6 +161,7 @@ function openAddPageModal(pagePath, menuConfig, onConfigChange) {
   });
 
   modal.style.display = 'flex';
+  modal.classList.add('show');
 }
 
 /**
@@ -221,7 +222,10 @@ async function handleAddPageSave(modal, menuConfig, onConfigChange) {
  */
 function closeAddPageModal() {
   const modal = document.getElementById(ADD_PAGE_MODAL_ID);
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('show');
+  }
 }
 
 /**
