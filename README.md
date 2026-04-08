@@ -48,7 +48,7 @@ npm run format
 
 ### Basic Usage
 
-1. Navigate to any Salesforce Setup page (e.g., `https://yourinstance.lightning.force.com/lightning/setup/SetupOneHome/home`)
+1. Navigate to any Salesforce Setup page (e.g., `https://yourinstance.my.salesforce-setup.com/lightning/setup/`)
 2. You'll see a new horizontal menu bar appear with your configured menu items
 3. Click any menu header to see dropdown options
 4. Click any menu item to navigate to that Setup page
