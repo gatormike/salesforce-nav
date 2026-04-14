@@ -45,6 +45,11 @@ const Z_INDEX_SETTINGS_MODAL = 100001;
 
 // Storage keys
 const STORAGE_KEY_MENU_CONFIG = 'menuConfig';
+const STORAGE_KEY_HISTORY = 'pageHistory';
+
+// History configuration
+const HISTORY_MAX_ITEMS = 10;
+const HISTORY_DROPDOWN_ID = 'sf-history-dropdown';
 
 // Star button configuration
 const STAR_BUTTON_CONFIG = {
@@ -58,6 +63,13 @@ const STAR_BUTTON_CONFIG = {
 
 // Settings button configuration
 const SETTINGS_BUTTON_CONFIG = {
+  width: '40px',
+  iconSize: '16',
+  iconColor: '#666'
+};
+
+// History button configuration
+const HISTORY_BUTTON_CONFIG = {
   width: '40px',
   iconSize: '16',
   iconColor: '#666'
