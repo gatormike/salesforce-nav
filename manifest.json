@@ -11,7 +11,7 @@
       "matches": [
         "https://*.my.salesforce-setup.com/*"
       ],
-      "js": ["src/constants.js", "src/utils.js", "src/storage.js", "config.js", "src/menu.js", "src/settings.js", "src/star.js", "content.js"],
+      "js": ["src/constants.js", "src/utils.js", "src/storage.js", "config.js", "src/menu.js", "src/settings.js", "src/star.js", "src/history.js", "content.js"],
       "css": ["styles.css"],
       "run_at": "document_end"
     }

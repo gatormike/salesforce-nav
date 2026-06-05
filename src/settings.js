@@ -119,22 +119,22 @@ function buildSettingsModal(menuConfig, onConfigChange) {
 
   const exportBtn = document.createElement('button');
   exportBtn.textContent = 'Export';
-  exportBtn.className = 'sf-btn';
+  exportBtn.className = 'slds-button slds-button_neutral';
   exportBtn.addEventListener('click', () => handleExport(menuConfig, message));
 
   const resetBtn = document.createElement('button');
   resetBtn.textContent = 'Reset';
-  resetBtn.className = 'sf-btn';
+  resetBtn.className = 'slds-button slds-button_neutral';
   resetBtn.addEventListener('click', () => handleReset(menuConfig, onConfigChange, message));
 
   const saveBtn = document.createElement('button');
   saveBtn.textContent = 'Save';
-  saveBtn.className = 'sf-btn sf-btn-primary';
+  saveBtn.className = 'slds-button slds-button_brand';
   saveBtn.addEventListener('click', () => handleSave(menuConfig, onConfigChange, message));
 
   const closeBtn = document.createElement('button');
   closeBtn.textContent = 'Close';
-  closeBtn.className = 'sf-btn';
+  closeBtn.className = 'slds-button slds-button_neutral';
   closeBtn.addEventListener('click', closeSettingsModal);
 
   footer.appendChild(message);

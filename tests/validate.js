@@ -40,7 +40,8 @@ const requiredFiles = [
   'src/storage.js',
   'src/menu.js',
   'src/settings.js',
-  'src/star.js'
+  'src/star.js',
+  'src/history.js'
 ];
 
 requiredFiles.forEach(file => {
@@ -92,6 +93,7 @@ if (manifest) {
       'src/menu.js',
       'src/settings.js',
       'src/star.js',
+      'src/history.js',
       'content.js'
     ];
     const actualJS = cs.js || [];

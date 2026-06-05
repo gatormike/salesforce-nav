@@ -6,8 +6,28 @@
 // Main menu configuration (loaded from storage or default)
 let menuConfig = deepClone(DEFAULT_MENU_CONFIG);
 
+// Track the last recorded path to detect navigation changes
+let lastTrackedPath = '';
+
 log('log', 'Extension loaded');
 log('log', 'Default config:', DEFAULT_MENU_CONFIG);
+
+/**
+ * Records the current page to visit history
+ */
+async function trackCurrentPage() {
+  const path = getActiveSetupPath();
+  if (!path || path === lastTrackedPath) return;
+  if (path.indexOf(SF_SETUP_BASE) !== 0) return;
+
+  lastTrackedPath = path;
+  const relPath = normalizePathForStorage(path);
+
+  const rawTitle = document.title?.replace(/\s*[-|].*$/, '').trim() || '';
+  const label = rawTitle || relPath.split('/').filter(Boolean).pop() || relPath;
+
+  await saveToHistory({ path: relPath, label, timestamp: Date.now() });
+}
 
 /**
  * Initializes the menu system
@@ -17,6 +37,12 @@ async function initializeExtension() {
     // Load configuration from storage
     menuConfig = await loadMenuConfig();
     log('log', menuConfig ? 'Using custom config' : 'Using default config');
+
+    // Record the initial page visit
+    await trackCurrentPage();
+
+    // Poll for path changes (SPA navigation)
+    setInterval(trackCurrentPage, STAR_UPDATE_POLL_INTERVAL);
 
     initializeMenu();
   } catch (err) {
@@ -102,23 +128,33 @@ function injectMenuWithButtons(container) {
     }
   }
 
+  // Create history button
+  const historyButton = createHistoryButton(menuConfig, handleConfigChange);
+
   // Create settings button
   const settingsButton = createSettingsButton(() => {
     openSettingsModal(menuConfig, handleConfigChange);
   });
 
-  // Append settings button at the end
+  // Append history and settings buttons at the end
   if (menuBar.style.display === 'none') {
     // Menu is just a marker, append to the tab bar
     const tabBar = document.querySelector(SALESFORCE_TAB_BAR_SELECTOR);
     if (tabBar) {
-      const li = document.createElement('li');
-      li.className = CSS_CLASS_INJECTED_ITEM;
-      li.style.listStyle = 'none';
-      li.appendChild(settingsButton);
-      tabBar.appendChild(li);
+      const historyLi = document.createElement('li');
+      historyLi.className = CSS_CLASS_INJECTED_ITEM;
+      historyLi.style.listStyle = 'none';
+      historyLi.appendChild(historyButton);
+      tabBar.appendChild(historyLi);
+
+      const settingsLi = document.createElement('li');
+      settingsLi.className = CSS_CLASS_INJECTED_ITEM;
+      settingsLi.style.listStyle = 'none';
+      settingsLi.appendChild(settingsButton);
+      tabBar.appendChild(settingsLi);
     }
   } else {
+    menuBar.appendChild(historyButton);
     menuBar.appendChild(settingsButton);
   }
 

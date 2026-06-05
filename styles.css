@@ -107,20 +107,69 @@
   border-left: 3px solid #5193f8;
 }
 
-.sf-injected-menu-item {
-  /* Injected menu items in Salesforce tab bar */
-}
-
 /* Star and Settings buttons */
 .sf-star-button,
-.sf-settings-button {
+.sf-settings-button,
+.sf-history-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 50px;
+  border-right: solid 1px rgb(201 201 201);
 }
 
 .sf-star-button svg {
   display: block;
+}
+
+/* History dropdown */
+.sf-history-dropdown {
+  min-width: 280px;
+}
+
+.sf-history-empty {
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.sf-history-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.sf-history-item:last-child {
+  border-bottom: none;
+}
+
+.sf-history-link {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.sf-history-add-btn {
+  flex-shrink: 0;
+  margin: 0 6px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid #bae6fd;
+  background: #f0f9ff;
+  color: #0369a1;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: background-color 0.15s ease;
+}
+
+.sf-history-add-btn:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
 }
 
 /* Modal base styles */
@@ -213,6 +262,7 @@
   flex-direction: column;
   height: 100%;
   max-height: 90vh;
+  min-height: 0;
 }
 
 .sf-settings-header {
@@ -255,6 +305,7 @@
   overflow-x: hidden;
   padding: 4px;
   margin: 0 -4px;
+  min-height: 0;
 }
 
 .sf-settings-groups::-webkit-scrollbar {
@@ -418,6 +469,7 @@
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
+  flex: 0 0 auto;
 }
 
 .sf-settings-message {
