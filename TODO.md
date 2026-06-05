@@ -1,7 +1,15 @@
-1. History Menu, Quick Add
+1. History Menu - Fix titles.  Currently the title of the history item comes from the page title. The issue is for example, a specific permission set named "View All Users" page title is "Permission Set".  Find the real name of the page header, rather than the title.  Fall back to title if cannot be found.
 
-- Add a new menu icon next to Settings called "History". Icon should resemble the backwards clock arrow (generic "history" icon)
-- Clicking this button will show the last 10 pages a user visited, in a dropdown, similar to rest of menu.
-- Next to each page in history, have abutton to allow a user to quickly add to the menu configuration
-- We'll need to start tracking a user visited
-- If a page in history is already in the menu, hide the add button.
+Possible ideas
+
+Recent Items
+Name | Type | Object
+Default	Business Hours | |	
+Account Owner Phone | Custom Field Definition | Account
+Age	| Custom Field Definition | Contact
+Advisor Access | Permission Set |	
+5500 Filing Permissions | Permission Set |	
+Integration - Arbutus | Permission Set |	
+Test Smith | User	
+Executive | Role	
+

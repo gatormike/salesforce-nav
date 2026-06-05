@@ -6,6 +6,12 @@ const DEFAULT_MENU_CONFIG = [
         "path": "ManageUsers/home"
       },
       {
+        "items": [
+          {
+            "label": "Integration User",
+            "path": "EnhancedProfiles/page?address=%2F00e0h000001asP7"
+          }
+        ],
         "label": "Profiles",
         "path": "EnhancedProfiles/home"
       },
@@ -14,12 +20,20 @@ const DEFAULT_MENU_CONFIG = [
         "path": "PermSets/home"
       },
       {
+        "label": "Custom Permissions",
+        "path": "CustomPermissions/home"
+      },
+      {
         "label": "Queues",
         "path": "Queues/home"
       },
       {
         "label": "Territory Models",
         "path": "Territory2Models/page"
+      },
+      {
+        "label": "Roles",
+        "path": "Roles/home"
       }
     ],
     "title": "Users"
@@ -39,6 +53,14 @@ const DEFAULT_MENU_CONFIG = [
         "path": "LightningComponentBundles/home"
       },
       {
+        "label": "Flows",
+        "path": "Flows/home"
+      },
+      {
+        "label": "Schema Builder",
+        "path": "SchemaBuilder/home"
+      },
+      {
         "label": "Custom Metadata Types",
         "path": "CustomMetadata/home"
       },
@@ -47,8 +69,8 @@ const DEFAULT_MENU_CONFIG = [
         "path": "NavigationMenus/home"
       },
       {
-        "label": "Flows",
-        "path": "Flows/home"
+        "label": "Debug Logs",
+        "path": "ApexDebugLogs/home"
       }
     ],
     "title": "Dev"
@@ -62,6 +84,10 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "Account",
         "path": "ObjectManager/Account/FieldsAndRelationships/view"
+      },
+      {
+        "label": "Contact",
+        "path": "ObjectManager/Contact/FieldsAndRelationships/view"
       },
       {
         "label": "Plan",
@@ -104,6 +130,10 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "Event Log File Browser",
         "path": "ElfBrowser/home"
+      },
+      {
+        "label": "External Client App Manager",
+        "path": "ManageExternalClientApplication/home"
       },
       {
         "label": "Sharing Settings",
@@ -152,5 +182,30 @@ const DEFAULT_MENU_CONFIG = [
       }
     ],
     "title": "Platform"
+  },
+  {
+    "items": [
+      {
+        "label": "Einstein Setup",
+        "path": "EinsteinGPTSetup/home"
+      },
+      {
+        "label": "Agentforce Data Library",
+        "path": "EinsteinDataLibrary/home"
+      },
+      {
+        "label": "Prompt Builder",
+        "path": "EinsteinPromptStudio/home"
+      },
+      {
+        "label": "Einstein Audit, Analytics",
+        "path": "EinsteinFeedbackSetup/home"
+      },
+      {
+        "label": "Einstein Trust Layer",
+        "path": "EinsteinTrustLayerSetup/home"
+      }
+    ],
+    "title": "Agentforce"
   }
 ];
