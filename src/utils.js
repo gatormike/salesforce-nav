@@ -59,7 +59,8 @@ function sanitizeInput(input) {
 function getActiveSetupPath() {
   try {
     const topPath = window.location?.pathname || '';
-    if (topPath.indexOf(SF_SETUP_BASE) === 0) return topPath;
+    const topSearch = window.location?.search || '';
+    if (topPath.indexOf(SF_SETUP_BASE) === 0) return topPath + topSearch;
 
     // Look for iframes whose src contains the setup path
     const iframes = Array.from(document.querySelectorAll('iframe'));
@@ -89,7 +90,7 @@ function getActiveSetupPath() {
     console.warn('[SF Nav] getActiveSetupPath failed', err);
   }
 
-  return window.location?.pathname || '';
+  return (window.location?.pathname || '') + (window.location?.search || '');
 }
 
 /**
