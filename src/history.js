@@ -115,4 +115,23 @@ async function refreshHistoryDropdown(dropdown, menuConfig, onConfigChange) {
 
     dropdown.appendChild(row);
   });
+
+  // Clear history action at the bottom
+  const divider = document.createElement('div');
+  divider.className = 'sf-history-divider';
+  dropdown.appendChild(divider);
+
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'sf-history-clear-btn';
+  clearBtn.textContent = 'Clear history';
+  clearBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    await clearHistory();
+    dropdown.innerHTML = '';
+    const empty = document.createElement('div');
+    empty.className = 'sf-history-empty';
+    empty.textContent = 'No history yet';
+    dropdown.appendChild(empty);
+  });
+  dropdown.appendChild(clearBtn);
 }

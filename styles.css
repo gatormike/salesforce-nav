@@ -172,6 +172,29 @@
   border-color: #7dd3fc;
 }
 
+.sf-history-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 0;
+}
+
+.sf-history-clear-btn {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  color: #666;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sf-history-clear-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
 /* Modal base styles */
 .sf-modal {
   position: fixed;
