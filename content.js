@@ -8,8 +8,11 @@ let menuConfig = deepClone(DEFAULT_MENU_CONFIG);
 
 // Track the last recorded path to detect navigation changes
 let lastTrackedPath = '';
-// Observer handle for title/label settling
+// Handles for the label-settling lifecycle (module-level for cleanup across navigations)
 let labelObserver = null;
+let labelPollTimer = null;
+let labelSettleTimer = null;
+let labelMaxWaitTimer = null;
 
 log('log', 'Extension loaded');
 log('log', 'Default config:', DEFAULT_MENU_CONFIG);
@@ -25,17 +28,14 @@ function resolveLabelFromPage() {
   for (const iframe of iframes) {
     try {
       const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-      if (!iframeDoc) {
-        log('log', 'Iframe not accessible:', iframe.src?.substring(0, 80));
-        continue;
-      }
+      if (!iframeDoc) continue;
       for (const selector of HISTORY_LABEL_SELECTORS) {
         const el = iframeDoc.querySelector(selector);
         const text = el?.textContent?.trim();
         if (text) return text;
       }
     } catch (e) {
-      log('log', 'Cross-origin iframe:', iframe.src?.substring(0, 80));
+      // Cross-origin iframe — skip
     }
   }
 
@@ -61,6 +61,22 @@ function resolveLabelFromTitle() {
 }
 
 /**
+ * Tears down any active label-settling work.
+ */
+function cleanupLabelSettling() {
+  if (labelObserver) {
+    labelObserver.disconnect();
+    labelObserver = null;
+  }
+  clearInterval(labelPollTimer);
+  clearTimeout(labelSettleTimer);
+  clearTimeout(labelMaxWaitTimer);
+  labelPollTimer = null;
+  labelSettleTimer = null;
+  labelMaxWaitTimer = null;
+}
+
+/**
  * Records the current page to visit history.
  * Uses a settling strategy: saves immediately with the best label available,
  * then watches for DOM/title changes that yield a better label.
@@ -73,11 +89,8 @@ async function trackCurrentPage() {
   lastTrackedPath = path;
   const relPath = normalizePathForStorage(path);
 
-  // Disconnect any previous label observer
-  if (labelObserver) {
-    labelObserver.disconnect();
-    labelObserver = null;
-  }
+  // Cancel any previous label-settling work
+  cleanupLabelSettling();
 
   // Determine the best label available right now
   const bestLabel = resolveBestLabel(relPath);
@@ -102,42 +115,28 @@ function resolveBestLabel(relPath) {
  * once a more meaningful label becomes available.
  */
 function waitForBetterLabel(relPath, initialLabel) {
-  let settleTimer = null;
-  let pollTimer = null;
-
   function tryUpdate() {
     const candidate = resolveLabelFromPage() || resolveLabelFromTitle();
     if (candidate && candidate !== initialLabel) {
       // Found a better label — debounce to let it fully settle
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(async () => {
+      clearTimeout(labelSettleTimer);
+      labelSettleTimer = setTimeout(async () => {
         const finalLabel = resolveBestLabel(relPath);
         if (finalLabel !== initialLabel) {
           log('log', `History label updated: "${initialLabel}" → "${finalLabel}"`);
           await saveToHistory({ path: relPath, label: finalLabel, timestamp: Date.now() });
         }
-        cleanup();
+        cleanupLabelSettling();
       }, HISTORY_LABEL_SETTLE_DELAY);
     }
   }
 
-  function cleanup() {
-    if (labelObserver) {
-      labelObserver.disconnect();
-      labelObserver = null;
-    }
-    clearInterval(pollTimer);
-    clearTimeout(settleTimer);
-    clearTimeout(maxWaitTimer);
-  }
-
   // Stop observing after HISTORY_LABEL_MAX_WAIT
-  const maxWaitTimer = setTimeout(cleanup, HISTORY_LABEL_MAX_WAIT);
+  labelMaxWaitTimer = setTimeout(cleanupLabelSettling, HISTORY_LABEL_MAX_WAIT);
 
   labelObserver = new MutationObserver(() => {
-    // Bail out if we've navigated away
     if (normalizePathForStorage(getActiveSetupPath() || '') !== relPath) {
-      cleanup();
+      cleanupLabelSettling();
       return;
     }
     tryUpdate();
@@ -150,9 +149,9 @@ function waitForBetterLabel(relPath, initialLabel) {
   });
 
   // Poll periodically to catch iframe content that renders async
-  pollTimer = setInterval(() => {
+  labelPollTimer = setInterval(() => {
     if (normalizePathForStorage(getActiveSetupPath() || '') !== relPath) {
-      cleanup();
+      cleanupLabelSettling();
       return;
     }
     tryUpdate();
