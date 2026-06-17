@@ -32,14 +32,17 @@ function resolveLabelFromPage() {
   for (const iframe of iframes) {
     try {
       const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-      if (!iframeDoc) continue;
+      if (!iframeDoc) {
+        log('log', 'Iframe not accessible:', iframe.src?.substring(0, 80));
+        continue;
+      }
       for (const selector of HISTORY_LABEL_SELECTORS) {
         const el = iframeDoc.querySelector(selector);
         const text = el?.textContent?.trim();
         if (text) return text;
       }
     } catch (e) {
-      // Cross-origin iframe — skip
+      log('log', 'Cross-origin iframe:', iframe.src?.substring(0, 80));
     }
   }
 
@@ -95,12 +98,12 @@ function resolveBestLabel(relPath) {
 }
 
 /**
- * Observes DOM mutations and iframe loads to update the history entry
+ * Observes DOM mutations and polls iframes to update the history entry
  * once a more meaningful label becomes available.
  */
 function waitForBetterLabel(relPath, initialLabel) {
   let settleTimer = null;
-  let iframeLoadHandlers = [];
+  let pollTimer = null;
 
   function tryUpdate() {
     const candidate = resolveLabelFromPage() || resolveLabelFromTitle();
@@ -118,25 +121,12 @@ function waitForBetterLabel(relPath, initialLabel) {
     }
   }
 
-  function attachIframeListeners() {
-    document.querySelectorAll('iframe').forEach(iframe => {
-      if (iframe.__sfHistoryListening) return;
-      iframe.__sfHistoryListening = true;
-      const handler = () => tryUpdate();
-      iframe.addEventListener('load', handler);
-      iframeLoadHandlers.push({ iframe, handler });
-    });
-  }
-
   function cleanup() {
     if (labelObserver) {
       labelObserver.disconnect();
       labelObserver = null;
     }
-    iframeLoadHandlers.forEach(({ iframe, handler }) => {
-      iframe.removeEventListener('load', handler);
-    });
-    iframeLoadHandlers = [];
+    clearInterval(pollTimer);
     clearTimeout(settleTimer);
     clearTimeout(maxWaitTimer);
   }
@@ -150,8 +140,6 @@ function waitForBetterLabel(relPath, initialLabel) {
       cleanup();
       return;
     }
-    // Pick up newly added iframes
-    attachIframeListeners();
     tryUpdate();
   });
 
@@ -161,10 +149,16 @@ function waitForBetterLabel(relPath, initialLabel) {
     characterData: true
   });
 
-  // Attach to any iframes already present
-  attachIframeListeners();
+  // Poll periodically to catch iframe content that renders async
+  pollTimer = setInterval(() => {
+    if (normalizePathForStorage(getActiveSetupPath() || '') !== relPath) {
+      cleanup();
+      return;
+    }
+    tryUpdate();
+  }, 500);
 
-  // Also check immediately in case title already settled
+  // Also check immediately
   tryUpdate();
 }
 
