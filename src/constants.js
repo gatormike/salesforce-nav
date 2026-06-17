@@ -50,6 +50,18 @@ const STORAGE_KEY_HISTORY = 'pageHistory';
 // History configuration
 const HISTORY_MAX_ITEMS = 10;
 const HISTORY_DROPDOWN_ID = 'sf-history-dropdown';
+const HISTORY_LABEL_SETTLE_DELAY = 300;
+const HISTORY_LABEL_MAX_WAIT = 5000;
+
+// Selectors used to resolve a meaningful page label, tried in order.
+// The first non-empty text found wins.
+const HISTORY_LABEL_SELECTORS = [
+  'h2.pageDescription',
+  '.slds-page-header__title',
+  '.uiOutputText[data-aura-class="uiOutputText"]',
+  'h1.slds-page-header__title',
+  '.setup-header h1'
+];
 
 // Star button configuration
 const STAR_BUTTON_CONFIG = {

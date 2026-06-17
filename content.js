@@ -8,12 +8,40 @@ let menuConfig = deepClone(DEFAULT_MENU_CONFIG);
 
 // Track the last recorded path to detect navigation changes
 let lastTrackedPath = '';
+// Observer handle for title/label settling
+let labelObserver = null;
 
 log('log', 'Extension loaded');
 log('log', 'Default config:', DEFAULT_MENU_CONFIG);
 
 /**
- * Records the current page to visit history
+ * Attempts to resolve a meaningful page label from DOM selectors.
+ * Returns the first non-empty match or null.
+ */
+function resolveLabelFromPage() {
+  for (const selector of HISTORY_LABEL_SELECTORS) {
+    const el = document.querySelector(selector);
+    const text = el?.textContent?.trim();
+    if (text) return text;
+  }
+  return null;
+}
+
+/**
+ * Extracts a clean label from document.title by stripping the
+ * "| Salesforce" / "- Salesforce" suffix.
+ */
+function resolveLabelFromTitle() {
+  const raw = document.title?.replace(/\s*[-|].*$/, '').trim() || '';
+  // Ignore generic framework titles
+  if (!raw || /^(lightning experience|salesforce|setup)$/i.test(raw)) return null;
+  return raw;
+}
+
+/**
+ * Records the current page to visit history.
+ * Uses a settling strategy: saves immediately with the best label available,
+ * then watches for DOM/title changes that yield a better label.
  */
 async function trackCurrentPage() {
   const path = getActiveSetupPath();
@@ -23,10 +51,83 @@ async function trackCurrentPage() {
   lastTrackedPath = path;
   const relPath = normalizePathForStorage(path);
 
-  const rawTitle = document.title?.replace(/\s*[-|].*$/, '').trim() || '';
-  const label = rawTitle || relPath.split('/').filter(Boolean).pop() || relPath;
+  // Disconnect any previous label observer
+  if (labelObserver) {
+    labelObserver.disconnect();
+    labelObserver = null;
+  }
 
-  await saveToHistory({ path: relPath, label, timestamp: Date.now() });
+  // Determine the best label available right now
+  const bestLabel = resolveBestLabel(relPath);
+  await saveToHistory({ path: relPath, label: bestLabel, timestamp: Date.now() });
+
+  // Watch for a better label to appear (title change or DOM addition)
+  waitForBetterLabel(relPath, bestLabel);
+}
+
+/**
+ * Returns the best label currently available for a path.
+ */
+function resolveBestLabel(relPath) {
+  return resolveLabelFromPage()
+    || resolveLabelFromTitle()
+    || relPath.split('/').filter(Boolean).pop()
+    || relPath;
+}
+
+/**
+ * Observes DOM mutations and title changes to update the history entry
+ * once a more meaningful label becomes available.
+ */
+function waitForBetterLabel(relPath, initialLabel) {
+  const startTime = Date.now();
+  let settleTimer = null;
+
+  function tryUpdate() {
+    const candidate = resolveLabelFromPage() || resolveLabelFromTitle();
+    if (candidate && candidate !== initialLabel) {
+      // Found a better label — debounce to let it fully settle
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(async () => {
+        const finalLabel = resolveBestLabel(relPath);
+        if (finalLabel !== initialLabel) {
+          log('log', `History label updated: "${initialLabel}" → "${finalLabel}"`);
+          await saveToHistory({ path: relPath, label: finalLabel, timestamp: Date.now() });
+        }
+        cleanup();
+      }, HISTORY_LABEL_SETTLE_DELAY);
+    }
+  }
+
+  function cleanup() {
+    if (labelObserver) {
+      labelObserver.disconnect();
+      labelObserver = null;
+    }
+    clearTimeout(settleTimer);
+    clearTimeout(maxWaitTimer);
+  }
+
+  // Stop observing after HISTORY_LABEL_MAX_WAIT
+  const maxWaitTimer = setTimeout(cleanup, HISTORY_LABEL_MAX_WAIT);
+
+  labelObserver = new MutationObserver(() => {
+    // Bail out if we've navigated away
+    if (normalizePathForStorage(getActiveSetupPath() || '') !== relPath) {
+      cleanup();
+      return;
+    }
+    tryUpdate();
+  });
+
+  labelObserver.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    characterData: true
+  });
+
+  // Also check immediately in case title already settled
+  tryUpdate();
 }
 
 /**
