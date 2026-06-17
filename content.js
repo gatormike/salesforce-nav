@@ -16,18 +16,11 @@ log('log', 'Default config:', DEFAULT_MENU_CONFIG);
 
 /**
  * Attempts to resolve a meaningful page label from DOM selectors.
- * Searches the top document and same-origin iframes.
+ * Searches same-origin iframes first (more specific), then the top document.
  * Returns the first non-empty match or null.
  */
 function resolveLabelFromPage() {
-  // Search top document first
-  for (const selector of HISTORY_LABEL_SELECTORS) {
-    const el = document.querySelector(selector);
-    const text = el?.textContent?.trim();
-    if (text) return text;
-  }
-
-  // Search inside accessible iframes
+  // Search iframes first — they contain the specific page content
   const iframes = document.querySelectorAll('iframe');
   for (const iframe of iframes) {
     try {
@@ -44,6 +37,13 @@ function resolveLabelFromPage() {
     } catch (e) {
       log('log', 'Cross-origin iframe:', iframe.src?.substring(0, 80));
     }
+  }
+
+  // Fall back to top document
+  for (const selector of HISTORY_LABEL_SELECTORS) {
+    const el = document.querySelector(selector);
+    const text = el?.textContent?.trim();
+    if (text) return text;
   }
 
   return null;
