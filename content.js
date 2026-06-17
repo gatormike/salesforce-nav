@@ -95,12 +95,12 @@ function resolveBestLabel(relPath) {
 }
 
 /**
- * Observes DOM mutations and title changes to update the history entry
+ * Observes DOM mutations and iframe loads to update the history entry
  * once a more meaningful label becomes available.
  */
 function waitForBetterLabel(relPath, initialLabel) {
-  const startTime = Date.now();
   let settleTimer = null;
+  let iframeLoadHandlers = [];
 
   function tryUpdate() {
     const candidate = resolveLabelFromPage() || resolveLabelFromTitle();
@@ -118,11 +118,25 @@ function waitForBetterLabel(relPath, initialLabel) {
     }
   }
 
+  function attachIframeListeners() {
+    document.querySelectorAll('iframe').forEach(iframe => {
+      if (iframe.__sfHistoryListening) return;
+      iframe.__sfHistoryListening = true;
+      const handler = () => tryUpdate();
+      iframe.addEventListener('load', handler);
+      iframeLoadHandlers.push({ iframe, handler });
+    });
+  }
+
   function cleanup() {
     if (labelObserver) {
       labelObserver.disconnect();
       labelObserver = null;
     }
+    iframeLoadHandlers.forEach(({ iframe, handler }) => {
+      iframe.removeEventListener('load', handler);
+    });
+    iframeLoadHandlers = [];
     clearTimeout(settleTimer);
     clearTimeout(maxWaitTimer);
   }
@@ -136,6 +150,8 @@ function waitForBetterLabel(relPath, initialLabel) {
       cleanup();
       return;
     }
+    // Pick up newly added iframes
+    attachIframeListeners();
     tryUpdate();
   });
 
@@ -144,6 +160,9 @@ function waitForBetterLabel(relPath, initialLabel) {
     subtree: true,
     characterData: true
   });
+
+  // Attach to any iframes already present
+  attachIframeListeners();
 
   // Also check immediately in case title already settled
   tryUpdate();
