@@ -85,6 +85,7 @@ async function trackCurrentPage() {
   const path = getActiveSetupPath();
   if (!path || path === lastTrackedPath) return;
   if (path.indexOf(SF_SETUP_BASE) !== 0) return;
+  if (path.includes('home?SetupDomainProbePassed=true')) return;
 
   lastTrackedPath = path;
   const relPath = normalizePathForStorage(path);

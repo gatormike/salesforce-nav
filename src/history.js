@@ -66,7 +66,7 @@ function createHistoryButton(menuConfig, onConfigChange) {
 async function refreshHistoryDropdown(dropdown, menuConfig, onConfigChange) {
   dropdown.innerHTML = '';
 
-  const history = await loadHistory();
+  const history = (await loadHistory()).slice(0, HISTORY_DISPLAY_LIMIT);
 
   if (!history.length) {
     const empty = document.createElement('div');
@@ -134,4 +134,14 @@ async function refreshHistoryDropdown(dropdown, menuConfig, onConfigChange) {
     dropdown.appendChild(empty);
   });
   dropdown.appendChild(clearBtn);
+
+  const debugBtn = document.createElement('button');
+  debugBtn.className = 'sf-history-clear-btn';
+  debugBtn.textContent = 'Debug: log history JSON';
+  debugBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const raw = await loadHistory();
+    console.log('[sf-nav] history JSON:', JSON.stringify(raw, null, 2));
+  });
+  dropdown.appendChild(debugBtn);
 }

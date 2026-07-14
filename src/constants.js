@@ -48,7 +48,8 @@ const STORAGE_KEY_MENU_CONFIG = 'menuConfig';
 const STORAGE_KEY_HISTORY = 'pageHistory';
 
 // History configuration
-const HISTORY_MAX_ITEMS = 10;
+const HISTORY_MAX_ITEMS = 100;
+  const HISTORY_DISPLAY_LIMIT = 10;
 const HISTORY_DROPDOWN_ID = 'sf-history-dropdown';
 const HISTORY_LABEL_SETTLE_DELAY = 300;
 const HISTORY_LABEL_MAX_WAIT = 5000;

@@ -1,6 +1,6 @@
-# Salesforce Setup Navigator Chrome Extension
+# SetupPilot for Salesforce
 
-A Chrome extension that adds a configurable horizontal navigation menu to Salesforce Setup pages for quick access to commonly used setup pages.
+A Chrome extension that adds a customisable quick-navigation toolbar to Salesforce Setup. Pin your most-used pages, browse recent history, and jump anywhere in Setup in one click.
 
 ## ✨ Features
 
@@ -262,8 +262,12 @@ The manifest.json specifies the load order for JS files:
 
 ## 📄 License
 
-MIT
+MIT — see [LICENSE](LICENSE)
 
 ## 🙏 Support
 
 For issues or feature requests, please open an issue in the repository.
+
+## 🔐 Privacy
+
+This extension stores data locally only. No data is ever transmitted. See [privacy-policy.md](privacy-policy.md).
