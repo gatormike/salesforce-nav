@@ -91,5 +91,5 @@ const HISTORY_BUTTON_CONFIG = {
 // Validation patterns
 const URL_ALLOWED_PATTERNS = [
   SF_SETUP_PATTERN,
-  /^[a-zA-Z0-9_\-\/]+$/ // Relative paths with alphanumeric and basic chars
+  /^[a-zA-Z0-9_\-\/\?=&%.+]+$/ // Relative paths with alphanumeric, basic chars, and query strings
 ];
