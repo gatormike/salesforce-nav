@@ -1,25 +1,17 @@
 const DEFAULT_MENU_CONFIG = [
   {
-    "path": "ManageUsers/home",
-    "title": "Users",
     "items": [
       {
-        "label": "Users",
-        "path": "ManageUsers/home"
-      },
-      {
-        "items": [
-          {
-            "label": "Integration User",
-            "path": "EnhancedProfiles/page?address=%2F00e0h000001asP7"
-          }
-        ],
         "label": "Profiles",
         "path": "EnhancedProfiles/home"
       },
       {
         "label": "Permission Sets",
         "path": "PermSets/home"
+      },
+      {
+        "label": "Permission Set Groups",
+        "path": "PermSetGroups/home"
       },
       {
         "label": "Custom Permissions",
@@ -37,16 +29,12 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Roles",
         "path": "Roles/home"
       }
-    ]
+    ],
+    "title": "Users",
+    "path": "ManageUsers/home"
   },
   {
-    "path": "ApexClasses/home",
-    "title": "Dev",
     "items": [
-      {
-        "label": "Apex Classes",
-        "path": "ApexClasses/home"
-      },
       {
         "label": "Apex Testing",
         "path": "ApexTestQueue/home"
@@ -74,17 +62,21 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "Debug Logs",
         "path": "ApexDebugLogs/home"
+      },
+      {
+        "label": "Sites",
+        "path": "SetupNetworks/home"
+      },
+      {
+        "label": "Lightning App Builder",
+        "path": "FlexiPageList/home"
       }
-    ]
+    ],
+    "title": "Dev",
+    "path": "ApexClasses/home"
   },
   {
-    "path": "ObjectManager/home",
-    "title": "Objects",
     "items": [
-      {
-        "label": "Object Manager",
-        "path": "ObjectManager/home"
-      },
       {
         "label": "Account",
         "path": "ObjectManager/Account/FieldsAndRelationships/view"
@@ -100,17 +92,17 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "Case",
         "path": "ObjectManager/Case/FieldsAndRelationships/view"
+      },
+      {
+        "label": "Sharing Settings",
+        "path": "SecuritySharing/home"
       }
-    ]
+    ],
+    "title": "Objects",
+    "path": "ObjectManager/home"
   },
   {
-    "path": "AsyncApexJobs/home",
-    "title": "Jobs",
     "items": [
-      {
-        "label": "Apex Jobs",
-        "path": "AsyncApexJobs/home"
-      },
       {
         "label": "Bulk Data Load",
         "path": "AsyncApiJobStatus/home"
@@ -119,16 +111,12 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Scheduled",
         "path": "ScheduledJobs/home"
       }
-    ]
+    ],
+    "title": "Jobs",
+    "path": "AsyncApexJobs/home"
   },
   {
-    "path": "TransactionSecurityNew/home",
-    "title": "Security",
     "items": [
-      {
-        "label": "Transaction Security Policies",
-        "path": "TransactionSecurityNew/home"
-      },
       {
         "label": "Event Manager",
         "path": "EventManager/home"
@@ -140,10 +128,6 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "External Client App Manager",
         "path": "ManageExternalClientApplication/home"
-      },
-      {
-        "label": "Sharing Settings",
-        "path": "SecuritySharing/home"
       },
       {
         "label": "Connected Apps OAuth Usage",
@@ -161,16 +145,12 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Named Credentials",
         "path": "NamedCredential/home"
       }
-    ]
+    ],
+    "title": "Security",
+    "path": "TransactionSecurityNew/home"
   },
   {
-    "path": "CompanyProfileInfo/home",
-    "title": "Platform",
     "items": [
-      {
-        "label": "Company Info",
-        "path": "CompanyProfileInfo/home"
-      },
       {
         "label": "Storage Usage",
         "path": "CompanyResourceDisk/home"
@@ -186,17 +166,21 @@ const DEFAULT_MENU_CONFIG = [
       {
         "label": "My Domain",
         "path": "OrgDomain/home"
+      },
+      {
+        "label": "Session Settings",
+        "path": "SecuritySession/home"
+      },
+      {
+        "label": "Installed Packages",
+        "path": "ImportedPackage/home"
       }
-    ]
+    ],
+    "title": "Platform",
+    "path": "CompanyProfileInfo/home"
   },
   {
-    "path": "EinsteinCopilot/home",
-    "title": "Agentforce",
     "items": [
-      {
-        "label": "Einstein Setup",
-        "path": "EinsteinGPTSetup/home"
-      },
       {
         "label": "Agentforce Data Library",
         "path": "EinsteinDataLibrary/home"
@@ -210,9 +194,15 @@ const DEFAULT_MENU_CONFIG = [
         "path": "EinsteinFeedbackSetup/home"
       },
       {
+        "label": "Einstein Setup",
+        "path": "EinsteinGPTSetup/home"
+      },
+      {
         "label": "Einstein Trust Layer",
         "path": "EinsteinTrustLayerSetup/home"
       }
-    ]
+    ],
+    "title": "Agentforce",
+    "path": "EinsteinCopilot/home"
   }
 ];

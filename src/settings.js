@@ -193,6 +193,15 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
       menuConfig[groupIndex].title = titleInput.value;
     });
 
+    const pathInput = document.createElement("input");
+    pathInput.type = "text";
+    pathInput.value = group.path || "";
+    pathInput.className = "sf-settings-group-path";
+    pathInput.placeholder = "Parent link path, eg. ManageUsers/home";
+    pathInput.addEventListener("input", () => {
+      menuConfig[groupIndex].path = pathInput.value || undefined;
+    });
+
     gHeader.appendChild(dragHandle);
 
     const gControls = document.createElement('div');
@@ -237,6 +246,7 @@ function renderSettingsAdmin(menuConfig, onConfigChange) {
     gControls.appendChild(removeBtn);
 
     gHeader.appendChild(titleInput);
+    gHeader.appendChild(pathInput);
     gHeader.appendChild(gControls);
 
     const itemsWrap = document.createElement('div');

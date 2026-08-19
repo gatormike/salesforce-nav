@@ -406,6 +406,26 @@
   box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
 }
 
+.sf-settings-group-path {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+  background: #f8fafc;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.sf-settings-group-path:focus {
+  outline: none;
+  border-color: #0070d2;
+  box-shadow: 0 0 0 3px rgba(0, 112, 210, 0.1);
+  background: #fff;
+  color: #1e293b;
+}
+
 .sf-settings-controls {
   display: flex;
   gap: 6px;
