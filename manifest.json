@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SetupPilot for Salesforce",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A customisable quick-navigation toolbar for Salesforce Setup \u2014 pin your favourite pages, browse history, and jump anywhere in Setup in one click.",
   "permissions": [
     "storage"

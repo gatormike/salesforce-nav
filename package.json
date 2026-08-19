@@ -1,6 +1,6 @@
 {
   "name": "salesforce-setup-navigator",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Chrome extension for enhanced Salesforce Setup navigation",
   "scripts": {
     "lint": "eslint *.js src/**/*.js",
