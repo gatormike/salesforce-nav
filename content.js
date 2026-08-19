@@ -82,6 +82,7 @@ function cleanupLabelSettling() {
  * then watches for DOM/title changes that yield a better label.
  */
 async function trackCurrentPage() {
+  if (!isContextValid()) return;
   const path = getActiveSetupPath();
   if (!path || path === lastTrackedPath) return;
   if (path.indexOf(SF_SETUP_BASE) !== 0) return;

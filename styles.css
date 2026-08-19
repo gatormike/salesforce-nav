@@ -600,3 +600,11 @@
   border-color: #fca5a5;
 }
 
+
+/* Parent label with a defined navigation path */
+.sf-nav-button-linked {
+  cursor: pointer;
+}
+.sf-nav-button-linked::after {
+  display: none;
+}

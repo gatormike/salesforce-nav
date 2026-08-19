@@ -14,6 +14,10 @@ function createMenuItem(menuGroup) {
   const menuButton = document.createElement('button');
   menuButton.className = CSS_CLASS_NAV_BUTTON;
   menuButton.textContent = menuGroup.title;
+  if (menuGroup.path) {
+    menuButton.title = menuGroup.path;
+    menuButton.classList.add('sf-nav-button-linked');
+  }
 
   const dropdown = document.createElement('div');
   dropdown.className = CSS_CLASS_NAV_DROPDOWN;
@@ -40,9 +44,16 @@ function createMenuItem(menuGroup) {
     dropdown.appendChild(link);
   });
 
-  // Toggle dropdown on click
+  // Navigate on click if group has a path; otherwise toggle dropdown
   menuButton.addEventListener('click', (e) => {
     e.stopPropagation();
+    if (menuGroup.path) {
+      const fullPath = resolveConfigPath(menuGroup.path);
+      if (isValidSalesforceUrl(fullPath)) {
+        window.location.href = fullPath;
+        return;
+      }
+    }
     const isOpen = menuItem.classList.contains(CSS_CLASS_OPEN);
 
     // Close all other dropdowns

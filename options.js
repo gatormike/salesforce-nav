@@ -52,6 +52,13 @@
               }
             }
           });
+          if (typeof group.path === 'string') {
+            if (group.path.indexOf('/lightning/setup/') === 0) {
+              group.path = group.path.replace(/^\/lightning\/setup\//, '');
+            } else if (group.path.indexOf('/') === 0) {
+              group.path = group.path.replace(/^\/+/, '');
+            }
+          }
         });
 
         chrome.storage.sync.set({ menuConfig: parsed }, ()=>{

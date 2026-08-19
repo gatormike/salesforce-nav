@@ -2,6 +2,22 @@
  * Storage management for menu configuration
  */
 
+// Returns false when the extension has been reloaded and this content script is orphaned
+function isContextValid() {
+  try { return !!chrome.runtime?.id; } catch { return false; }
+}
+
+// Copies path from DEFAULT_MENU_CONFIG into any stored group that is missing it
+function backfillGroupPaths(config) {
+  config.forEach(group => {
+    if (!group.path) {
+      const def = DEFAULT_MENU_CONFIG.find(g => g.title === group.title);
+      if (def && def.path) group.path = def.path;
+    }
+  });
+  return config;
+}
+
 /**
  * Loads menu configuration from storage
  * @returns {Promise<Array>} Menu configuration array
@@ -9,6 +25,7 @@
 async function loadMenuConfig() {
   return new Promise((resolve) => {
     try {
+      if (!isContextValid()) { resolve(deepClone(DEFAULT_MENU_CONFIG)); return; }
       chrome.storage.sync.get([STORAGE_KEY_MENU_CONFIG], (result) => {
         if (chrome.runtime.lastError) {
           log('warn', 'Failed to load config from storage:', chrome.runtime.lastError);
@@ -16,7 +33,7 @@ async function loadMenuConfig() {
           return;
         }
 
-        const config = result[STORAGE_KEY_MENU_CONFIG] || deepClone(DEFAULT_MENU_CONFIG);
+        const config = backfillGroupPaths(result[STORAGE_KEY_MENU_CONFIG] || deepClone(DEFAULT_MENU_CONFIG));
         log('log', 'Loaded config from storage:', config);
         resolve(config);
       });
@@ -35,12 +52,14 @@ async function loadMenuConfig() {
 async function saveMenuConfig(config) {
   return new Promise((resolve, reject) => {
     try {
+      if (!isContextValid()) { resolve(); return; }
       // Validate before saving
       validateMenuConfig(config);
 
       // Normalize all paths before saving
       const normalizedConfig = config.map(group => ({
         ...group,
+        path: group.path ? normalizePathForStorage(group.path) : undefined,
         items: (group.items || []).map(item => ({
           ...item,
           path: normalizePathForStorage(item.path)
@@ -83,6 +102,7 @@ async function resetMenuConfig() {
 async function loadHistory() {
   return new Promise((resolve) => {
     try {
+      if (!isContextValid()) { resolve([]); return; }
       chrome.storage.local.get([STORAGE_KEY_HISTORY], (result) => {
         if (chrome.runtime.lastError) {
           log('warn', 'Failed to load history:', chrome.runtime.lastError);
@@ -106,6 +126,7 @@ async function loadHistory() {
 async function saveToHistory(entry) {
   return new Promise((resolve) => {
     try {
+      if (!isContextValid()) { resolve(); return; }
       chrome.storage.local.get([STORAGE_KEY_HISTORY], (result) => {
         if (chrome.runtime.lastError) {
           log('warn', 'Failed to read history for save:', chrome.runtime.lastError);
@@ -143,6 +164,7 @@ async function saveToHistory(entry) {
 async function clearHistory() {
   return new Promise((resolve) => {
     try {
+      if (!isContextValid()) { resolve(); return; }
       chrome.storage.local.remove(STORAGE_KEY_HISTORY, () => {
         if (chrome.runtime.lastError) {
           log('warn', 'Failed to clear history:', chrome.runtime.lastError);

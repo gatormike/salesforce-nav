@@ -1,5 +1,7 @@
 const DEFAULT_MENU_CONFIG = [
   {
+    "path": "ManageUsers/home",
+    "title": "Users",
     "items": [
       {
         "label": "Users",
@@ -35,10 +37,11 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Roles",
         "path": "Roles/home"
       }
-    ],
-    "title": "Users"
+    ]
   },
   {
+    "path": "ApexClasses/home",
+    "title": "Dev",
     "items": [
       {
         "label": "Apex Classes",
@@ -72,10 +75,11 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Debug Logs",
         "path": "ApexDebugLogs/home"
       }
-    ],
-    "title": "Dev"
+    ]
   },
   {
+    "path": "ObjectManager/home",
+    "title": "Objects",
     "items": [
       {
         "label": "Object Manager",
@@ -97,10 +101,11 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Case",
         "path": "ObjectManager/Case/FieldsAndRelationships/view"
       }
-    ],
-    "title": "Objects"
+    ]
   },
   {
+    "path": "AsyncApexJobs/home",
+    "title": "Jobs",
     "items": [
       {
         "label": "Apex Jobs",
@@ -114,10 +119,11 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Scheduled",
         "path": "ScheduledJobs/home"
       }
-    ],
-    "title": "Jobs"
+    ]
   },
   {
+    "path": "TransactionSecurityNew/home",
+    "title": "Security",
     "items": [
       {
         "label": "Transaction Security Policies",
@@ -155,10 +161,11 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Named Credentials",
         "path": "NamedCredential/home"
       }
-    ],
-    "title": "Security"
+    ]
   },
   {
+    "path": "CompanyProfileInfo/home",
+    "title": "Platform",
     "items": [
       {
         "label": "Company Info",
@@ -180,10 +187,11 @@ const DEFAULT_MENU_CONFIG = [
         "label": "My Domain",
         "path": "OrgDomain/home"
       }
-    ],
-    "title": "Platform"
+    ]
   },
   {
+    "path": "EinsteinCopilot/home",
+    "title": "Agentforce",
     "items": [
       {
         "label": "Einstein Setup",
@@ -205,7 +213,6 @@ const DEFAULT_MENU_CONFIG = [
         "label": "Einstein Trust Layer",
         "path": "EinsteinTrustLayerSetup/home"
       }
-    ],
-    "title": "Agentforce"
+    ]
   }
 ];
