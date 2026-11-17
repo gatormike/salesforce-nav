@@ -13,6 +13,7 @@ let labelObserver = null;
 let labelPollTimer = null;
 let labelSettleTimer = null;
 let labelMaxWaitTimer = null;
+let menuSuppressedForIgnoredSetupPath = false;
 
 log('log', 'Extension loaded');
 log('log', 'Default config:', DEFAULT_MENU_CONFIG);
@@ -176,7 +177,10 @@ async function initializeExtension() {
     await trackCurrentPage();
 
     // Poll for path changes (SPA navigation)
-    setInterval(trackCurrentPage, STAR_UPDATE_POLL_INTERVAL);
+    setInterval(() => {
+      trackCurrentPage();
+      syncMenuVisibility();
+    }, STAR_UPDATE_POLL_INTERVAL);
 
     initializeMenu();
   } catch (err) {
@@ -188,6 +192,13 @@ async function initializeExtension() {
  * Initializes menu injection
  */
 function initializeMenu() {
+  if (isIgnoredSetupPath(window.location.pathname)) {
+    menuSuppressedForIgnoredSetupPath = true;
+    removeExistingMenu();
+    return;
+  }
+  menuSuppressedForIgnoredSetupPath = false;
+
   log('log', 'Initializing menu...');
 
   // Observe DOM for Salesforce container
@@ -229,10 +240,32 @@ function initializeMenu() {
 }
 
 /**
+ * Keeps menu visibility in sync with SPA route changes.
+ */
+function syncMenuVisibility() {
+  if (isIgnoredSetupPath(window.location.pathname)) {
+    if (!menuSuppressedForIgnoredSetupPath) {
+      menuSuppressedForIgnoredSetupPath = true;
+      removeExistingMenu();
+    }
+    return;
+  }
+
+  if (menuSuppressedForIgnoredSetupPath) {
+    initializeMenu();
+  }
+}
+
+/**
  * Injects menu with star and settings buttons
  * @param {HTMLElement|null} container - Container to inject near
  */
 function injectMenuWithButtons(container) {
+  if (isIgnoredSetupPath(window.location.pathname)) {
+    removeExistingMenu();
+    return;
+  }
+
   // Inject the main menu
   injectMenu(container, menuConfig);
 

@@ -5,6 +5,7 @@
 // Salesforce Setup paths
 const SF_SETUP_BASE = '/lightning/setup/';
 const SF_SETUP_PATTERN = /^\/lightning\/setup\//;
+const IGNORED_SETUP_PATHS = ['/lwr/application/platformdx-webconsole'];
 
 // DOM selectors for finding Salesforce containers
 const SALESFORCE_SELECTORS = [

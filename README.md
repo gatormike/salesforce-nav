@@ -5,6 +5,7 @@ A Chrome extension that adds a customisable quick-navigation toolbar to Salesfor
 ## ✨ Features
 
 - **Horizontal Navigation Menu**: Clean, dropdown-based navigation that appears at the top of Salesforce Setup pages
+- **New Web Console support**: The navigation toolbar is hidden on excluded Salesforce Setup applications, including the new Web Console
 - **Fully Configurable**: Customize menu items via in-page modal or options page
 - **Quick Access**: Navigate to frequently used Setup pages with just two clicks
 - **Star Button**: Quickly add the current Setup page to your menu

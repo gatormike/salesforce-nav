@@ -6,6 +6,10 @@
 
 console.log('🧪 Running unit tests...\n');
 
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
 let passed = 0;
 let failed = 0;
 
@@ -68,6 +72,27 @@ function findMenuItemByPath(menuConfig, path) {
   }
   return { found: false, groupIndex: -1, itemIndex: -1 };
 }
+
+const utilityContext = {
+  IGNORED_SETUP_PATHS: ['/lwr/application/platformdx-webconsole']
+};
+vm.runInNewContext(
+  fs.readFileSync(path.join(__dirname, '..', 'src', 'utils.js'), 'utf8') +
+    '\nthis.isIgnoredSetupPath = isIgnoredSetupPath;',
+  utilityContext
+);
+
+console.log('Testing isIgnoredSetupPath:');
+test('matches the new Web Console route and nested pages', () => {
+  assert(utilityContext.isIgnoredSetupPath('/lwr/application/platformdx-webconsole'));
+  assert(
+    utilityContext.isIgnoredSetupPath('/lwr/application/platformdx-webconsole/setup/users')
+  );
+});
+test('does not match unrelated or similarly prefixed routes', () => {
+  assert(!utilityContext.isIgnoredSetupPath('/lightning/setup/Users/home'));
+  assert(!utilityContext.isIgnoredSetupPath('/lwr/application/platformdx-webconsole-old'));
+});
 
 // Tests for resolveConfigPath
 console.log('Testing resolveConfigPath:');

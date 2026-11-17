@@ -94,6 +94,17 @@ function getActiveSetupPath() {
 }
 
 /**
+ * Checks whether a path belongs to a setup application where the toolbar is suppressed.
+ * @param {string} pathname - URL pathname
+ * @returns {boolean} True for an ignored route and its nested pages
+ */
+function isIgnoredSetupPath(pathname) {
+  return IGNORED_SETUP_PATHS.some(
+    ignoredPath => pathname === ignoredPath || pathname.indexOf(ignoredPath + '/') === 0
+  );
+}
+
+/**
  * Finds the Salesforce setup container in the DOM
  * @returns {Element|null} Setup container element or null
  */
